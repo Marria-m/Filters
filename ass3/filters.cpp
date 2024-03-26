@@ -2,9 +2,9 @@
 using namespace std;
 
 
-void black_white(){
+string black_white(file_name){
     int gray ;
-    Image img("luffy.jpg") ;
+    Image img(file_name) ;
     for(int i = 0 ; i < img.width ; i++){
         for(int j = 0 ; j < img.height ; j++){
             // 3 as 0 -> Red , 1 -> Green , 2 -> Blue

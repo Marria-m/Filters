@@ -3,6 +3,7 @@ using namespace std;
 
 
 void saving(Image& img){
+    string file_name;
     cout << "Pls enter image name to store new image\n";
     cout << "and specify extension .jpg, .bmp, .png : ";
 

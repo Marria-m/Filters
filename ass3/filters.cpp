@@ -73,7 +73,7 @@ int main(){
         }
 
         string choice, rotate;
-        cout << "choose what u wanna apply on the Picture\n1)Grayscale\n2)Black and White\n3)Invert Image\n4)Flip Image\n5)Rotate Image\n6)Darken Image\n7)Lighten Image\n8)Adding a Frame to the Picture\n";
+        cout << "choose what u wanna apply on the Picture\n1)Grayscale\n2)Black and White\n3)Invert Image\n4)Flip Image\n5)Rotate Image\n6)Darken Image\n7)Lighten Image\n8)Exit ^-^\n";
         cin >> choice;
 
         if (choice == "1"){

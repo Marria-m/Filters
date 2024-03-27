@@ -13,7 +13,7 @@ void saving(Image& img){
 
 
 
-void black_white(Image img){
+void black_white(Image& img){
     int gray ;
     for(int i = 0 ; i < img.width ; i++){
         for(int j = 0 ; j < img.height ; j++){

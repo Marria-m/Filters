@@ -80,7 +80,7 @@ int main(){
             cout << "Rahma, put ur  Grayscale code in here";
         }
         else if (choice == "2"){
-            black_white(new_img);
+            black_white(img);
         }
         else if (choice == "3"){
             for (int i = 0; i < img.width; ++i) {

@@ -205,12 +205,13 @@ int main(){
                 }
                 saving(img);
             }
-            else {
+            else {  // if the user entered wrong choice
                 cout << "wrong! please enter a valid choice\n";
             }
         }
         
         else if (choice == "5"){
+            // display a menu to let the user choose the degree they want to rotate by
             cout << "rotate the image clockwise by..\n1)90 degree\n2)180 degree\n3)270 degree\n";
 
             // let the user choose the degree
@@ -223,67 +224,27 @@ int main(){
             }
                 
             else if (rotate == "2"){
-                // Rotate 180 degrees
-                // Flip the original image vertically and then horizontally
-                for (int t = 0; t < img.width - 1; ++t){  // vertically
-                    int top = 0;
-                    int bot = img.height - 1;
-                    while (top < bot){
-                        swap(img(t, top, 0), img(t, bot, 0));
-                        swap(img(t, top, 1), img(t, bot, 1));
-                        swap(img(t, top, 2), img(t, bot, 2));
-                        top++;
-                        bot--;
-                    }
-                }
+                // rotate image by 180 degrees by rotating the original image 90 degrees for two times
+
+                // call deg90 function 2 times
+                deg90(img, new_img);
+                deg90(new_img, img);
                 
-                for (int t = 0; t < img.height - 1; ++t){  // horizontally
-                    int l = 0;
-                    int r = img.width - 1;
-                    while (l < r){
-                        swap(img(l, t, 0), img(r, t, 0));
-                        swap(img(l, t, 1), img(r, t, 1));
-                        swap(img(l, t, 2), img(r, t, 2));
-                        l++;
-                        r--;
-                    }
-                }
                 saving(img);
             }
                 
             else if (rotate == "3"){
-                // rotate image by 270 degrees
-                
-                // rotate the original image 90 degree
+                // rotate image by 270 degrees by rotating the original image 90 degrees for three times
+
+                // call deg90 function 3 times
+                deg90(img, new_img);
+                deg90(new_img, img);
                 deg90(img, new_img);
 
-                // flip the new image after rotating vertically and horizontally
-                for (int t = 0; t < img.width - 1; ++t){  // vertically
-                    int top = 0;
-                    int bot = img.height - 1;
-                    while (top < bot){
-                        swap(img(t, top, 0), img(t, bot, 0));
-                        swap(img(t, top, 1), img(t, bot, 1));
-                        swap(img(t, top, 2), img(t, bot, 2));
-                        top++;
-                        bot--;
-                    }
-                }
-                
-                for (int t = 0; t < img.height - 1; ++t){  // horizontally
-                    int l = 0;
-                    int r = img.width - 1;
-                    while (l < r){
-                        swap(img(l, t, 0), img(r, t, 0));
-                        swap(img(l, t, 1), img(r, t, 1));
-                        swap(img(l, t, 2), img(r, t, 2));
-                        l++;
-                        r--;
-                    }
-                }
                 saving(new_img);
             }
-            else {
+                
+            else {  // if the user entered wrong choice
                 cout << "wrong! please enter a valid choice\n";
             }
         }

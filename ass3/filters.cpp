@@ -3,12 +3,13 @@ using namespace std;
 
 
 void saving(Image& img){
+    // Function to save the edited image with user-defined filename
     string file_name;
     cout << "Pls enter image name to store new image\n";
     cout << "and specify extension .jpg, .bmp, .png : ";
 
     cin >> file_name;
-    img.saveImage(file_name);
+    img.saveImage(file_name);  // Save the edited image
 }
 
 
@@ -36,6 +37,7 @@ void deg90(Image& img, Image& new_img){
     for (int i = 0; i < img.height - 1; ++i){
         for (int j = 0; j < img.width - 1; ++j){
             for (int k = 0; k < 3; ++k){
+                // Swap pixel data to perform 90 degree counter-clockwise rotation
                 swap(new_img(i, j, k), img(j, i, k));
             }
         }
@@ -44,6 +46,7 @@ void deg90(Image& img, Image& new_img){
         int l = 0;
         int r = new_img.width - 1;
         while (l < r){
+            // Swap pixel data to perform horizontal flip
             swap(new_img(l, t, 0), new_img(r, t, 0));
             swap(new_img(l, t, 1), new_img(r, t, 1));
             swap(new_img(l, t, 2), new_img(r, t, 2));
@@ -51,7 +54,6 @@ void deg90(Image& img, Image& new_img){
             r--;
         }
     }
-
 }
 
 

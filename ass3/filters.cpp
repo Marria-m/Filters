@@ -2,6 +2,16 @@
 using namespace std;
 
 
+void saving(Image& img){
+    cout << "Pls enter image name to store new image\n";
+    cout << "and specify extension .jpg, .bmp, .png : ";
+
+    cin >> file_name;
+    img.saveImage(file_name);
+}
+
+
+
 void black_white(Image img){
     int gray ;
     for(int i = 0 ; i < img.width ; i++){
@@ -44,24 +54,10 @@ void deg90(Image& img, Image& new_img){
 }
 
 
-void saving(Image& img){
-    cout << "Pls enter image name to store new image\n";
-    cout << "and specify extension .jpg, .bmp, .png : ";
-
-    cin >> file_name;
-    img.saveImage(file_name);
-}
-
-
 int main(){
 
     string file_name;
     cout << "plz enter the name of the image: \n";
-    cin >> file_name;
-    Image img(file_name), new_img;
-
-    string file_name;
-    cout << "plz enter name of the image: \n";
     cin >> file_name;
     Image img(file_name);
 
@@ -73,9 +69,6 @@ int main(){
             }
         }
     }
-
-    long long w = img.width;
-    long long h = img.height;
 
     string choice, rotate;
     cout << "choose what u wanna apply on the Picture\n1)Grayscale\n2)Black and White\n3)Invert Image\n4)Flip Image\n5)Rotate Image\n6)Darken Image\n7)Lighten Image\n8)Adding a Frame to the Picture\n";
@@ -100,7 +93,7 @@ int main(){
         saving(img);
     }
 
-    else if(choice == 4){
+    else if(choice == "4"){
         cout << "Flip the image...\n1)Vertical\n2)Horizontal\n";
         cin >> rotate;
         if (rotate == "1"){

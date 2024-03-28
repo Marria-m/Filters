@@ -55,7 +55,7 @@ void black_white(Image& img){
 }
 
 
-void deg90(Image& img, Image& new_img){
+void rotate90Degrees(Image& img, Image& new_img){
     for (int i = 0; i < img.height - 1; ++i){
         for (int j = 0; j < img.width - 1; ++j){
             for (int k = 0; k < 3; ++k){
@@ -219,7 +219,7 @@ int main(){
         
             if (rotate == "1"){
                 // rotate image by 90 degrees
-                deg90(img, new_img);  // call deg90 function
+                rotate90Degrees(img, new_img);  // call deg90 function
                 saving(new_img);
             }
                 
@@ -227,8 +227,8 @@ int main(){
                 // rotate image by 180 degrees by rotating the original image 90 degrees for two times
 
                 // call deg90 function 2 times
-                deg90(img, new_img);
-                deg90(new_img, img);
+                rotate90Degrees(img, new_img);
+                rotate90Degrees(new_img, img);
                 
                 saving(img);
             }
@@ -237,9 +237,9 @@ int main(){
                 // rotate image by 270 degrees by rotating the original image 90 degrees for three times
 
                 // call deg90 function 3 times
-                deg90(img, new_img);
-                deg90(new_img, img);
-                deg90(img, new_img);
+                rotate90Degrees(img, new_img);
+                rotate90Degrees(new_img, img);
+                rotate90Degrees(img, new_img);
 
                 saving(new_img);
             }

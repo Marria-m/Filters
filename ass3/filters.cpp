@@ -117,6 +117,55 @@ void darkenImage(Image& img) {
     saving(img);
 }
 
+void crop(){
+    int wid , hght;
+    std::cout << "Enter the dimension you want as 200 100 (200 is width , 100 is height):";
+    std::cin >> wid >> hght;
+
+    Image img1("luffy.jpg");
+    Image img2(wid, hght);
+
+    while (wid > img1.width || hght > img1.height||wid <= 0 || hght <= 0) {
+        std::cerr << "Error: Enter a valid  dimensions\n";
+        std::cin >> wid >> hght;
+    }
+
+    for(int i = 0 ; i < wid ; i++){
+        for(int j = 0 ; j < hght ; j++){
+            for(int k = 0 ; k < 3 ; k++) {
+                img2(i, j, k) = img1(i, j, k);
+            }
+        }
+
+    }
+    img2.saveImage("newImage.png");
+}
+
+void resize(){
+    std::cout << "Enter the dimension you want as 200 100 (200 is width , 100 is height): ";
+    int wid , hght ;
+    std::cin >> wid >> hght;
+
+    Image img1("luffy.jpg");
+
+    Image img2(wid, hght);
+
+    for(int i = 0 ; i < wid ; i++){
+        for(int j = 0 ; j < hght ; j++){
+            for(int k = 0 ; k < 3 ; k++) {
+
+                int x = i * img1.width / wid;
+                int y = j * img1.height / hght;
+                img2(i, j, k) = img1(x, y, k);
+            }
+        }
+
+    }
+    img2.saveImage("newImage.png");
+
+}
+
+
 
 int main(){
 

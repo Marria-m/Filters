@@ -6,12 +6,13 @@ void saving(Image& img){
     // Function to save the edited image with user-defined filename
     string file_name;
     cout << "Pls enter image name to store new image\n";
-    cout << "and specify extension .jpg, .bmp, .png : ";
-
+    cout << "and specify extension .jpg, .bmp, .png , .jpeg , .tga: ";
     cin >> file_name;
+    while(!file_name.find(".jpg") && !file_name.find(".bmp") && !file_name.find(".png") && !file_name.find(".jpeg") && !file_name.find(".tga")){
+        cout << "Please enter a valid image name with one of the following extensions: .jpg, .bmp, .png, .jpeg, .tga\n";
+    }
     img.saveImage(file_name);  // Save the edited image
 }
-
 
 // Grayscale Filter
 void GrayScale(Image& img) {
@@ -113,7 +114,7 @@ void darkenImage(Image& img) {
             }
         }
     }
-    
+
     saving(img);
 }
 
@@ -122,7 +123,7 @@ void crop(Image& img){
     std::cout << "Enter the dimension you want as 200 100 (200 is width , 100 is height):";
     std::cin >> wid >> hght;
 
-    Image img1(Image& img);
+    Image img1(img);
     Image img2(wid, hght);
 
     while (wid > img1.width || hght > img1.height||wid <= 0 || hght <= 0) {
@@ -146,7 +147,7 @@ void resize(Image& img){
     int wid , hght ;
     std::cin >> wid >> hght;
 
-    Image img1(Image& img);
+    Image img1(img);
 
     Image img2(wid, hght);
 
@@ -166,7 +167,7 @@ void resize(Image& img){
 }
 
 void skew(Image& img){
-    Image img1(Image& img);
+    Image img1(img);
     Image img2("newImage.png");
 
     for(int i = 0 ; i < img1.width ; i++){
@@ -209,7 +210,7 @@ int main(){
 
         // Display a list of the supported operations to the user
         cout << "choose what u wanna apply on the Picture\n1)Grayscale\n2)Black and White\n3)Invert Image\n4)Flip Image\n5)Rotate Image\n6)Darken Image\n7)Lighten Image\n8)crop Image\n9)resize Image\n10)skew Image\n11)Exit ^-^\n";
-        
+
         // let user enter their choice
         cin >> choice;
 
@@ -263,7 +264,7 @@ int main(){
                         swap(img(l, t, 0), img(r, t, 0));
                         swap(img(l, t, 1), img(r, t, 1));
                         swap(img(l, t, 2), img(r, t, 2));
-                        l++;    
+                        l++;
                         r--;
                     }
                 }
@@ -273,30 +274,30 @@ int main(){
                 cout << "wrong! please enter a valid choice\n";
             }
         }
-        
+
         else if (choice == "5"){
             // display a menu to let the user choose the degree they want to rotate by
             cout << "rotate the image clockwise by..\n1)90 degree\n2)180 degree\n3)270 degree\n";
 
             // let the user choose the degree
             cin >> rotate;
-        
+
             if (rotate == "1"){
                 // rotate image by 90 degrees
                 rotate90Degrees(img, new_img);  // call deg90 function
                 saving(new_img);
             }
-                
+
             else if (rotate == "2"){
                 // rotate image by 180 degrees by rotating the original image 90 degrees for two times
 
                 // call deg90 function 2 times
                 rotate90Degrees(img, new_img);
                 rotate90Degrees(new_img, img);
-                
+
                 saving(img);
             }
-                
+
             else if (rotate == "3"){
                 // rotate image by 270 degrees by rotating the original image 90 degrees for three times
 
@@ -307,14 +308,14 @@ int main(){
 
                 saving(new_img);
             }
-                
+
             else {  // if the user entered wrong choice
                 cout << "wrong! please enter a valid choice\n";
             }
         }
         else if (choice == "6"){
             // darken the image by 50%
-            darkenImage(img);  // call darkenImage 
+            darkenImage(img);  // call darkenImage
         }
         else if (choice == "7"){
             // lighten the image by 50%
@@ -335,7 +336,7 @@ int main(){
             cout << "Thanks for using app";
             break;
         }
-        else {  
+        else {
             // if the user entered a wrong choice display an error message
             cout << "wrong! please enter a valid choice\n";
         }
@@ -343,3 +344,5 @@ int main(){
 
     return 0;
 }
+
+

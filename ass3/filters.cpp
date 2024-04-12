@@ -211,6 +211,32 @@ void Infrared(Image& img) {
     }
     saving(img); // Save the edited image
 }
+void Purple(Image& img) {
+    for (int i = 0; i < img.width; ++i) {
+        for (int j = 0; j < img.height; ++j) {
+            // Increase the intensity of red and blue channels and decrease the green 
+            unsigned int red = img(i, j, 0) * 1.5; // Increase red channel
+            unsigned int green = img(i, j, 1) * 0.7; // Decrease green channel
+            unsigned int blue = img(i, j, 2) * 1.5; // Increase blue channel
+            
+            // Ensure that values are in the valid range (0 to 255)
+            if (red > 255){
+                red = 255;
+            }if (blue > 255){
+                blue = 255;
+            }if (green < 0){
+                green = 0;
+            }
+
+            // Set the new color channels
+            img(i, j, 0) = red;
+            img(i, j, 1) = green;
+            img(i, j, 2) = blue;
+        }
+    }
+    saving(img); // Save the edited image
+}
+
 
 int main(){
 
@@ -238,7 +264,7 @@ int main(){
         string choice, rotate;
 
         // Display a list of the supported operations to the user
-        cout << "choose what u wanna apply on the Picture\n1)Grayscale\n2)Black and White\n3)Invert Image\n4)Flip Image\n5)Rotate Image\n6)Darken Image\n7)Lighten Image\n8)Crop Image\n9)Adding a Frame\n10)Detect Image Edges\n11)Resize Image\n12)Blur Image\n13)Natural Sunlight\n14)Purple Filter\n15)Infrared Filter\n16)Image Skewing\n17)Exit ^-^\n""; 
+        cout << "choose what u wanna apply on the Picture\n1)Grayscale\n2)Black and White\n3)Invert Image\n4)Flip Image\n5)Rotate Image\n6)Darken Image\n7)Lighten Image\n8)Crop Image\n9)Adding a Frame\n10)Detect Image Edges\n11)Resize Image\n12)Blur Image\n13)Natural Sunlight\n14)Purple Filter\n15)Infrared Filter\n16)Image Skewing\n17)Exit ^-^\n"; 
             
         // let user enter their choice
         cin >> choice;

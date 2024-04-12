@@ -182,6 +182,35 @@ void skew(Image& img){
     }
     img2.saveImage("newImage.png");
 }
+void Infrared(Image& img) {
+    for (int i = 0; i < img.width; ++i) {
+        for (int j = 0; j < img.height; ++j) {
+            // Setting new values for green and blue channels
+            unsigned int red = 255 ;
+            unsigned int green = 255 - img(i, j, 2); // Green equals 225 minus blue
+            unsigned int blue = 255 - img(i, j, 1);  // Blue equals 225 minus green
+
+            // Ensure that values are in the valid range (0 to 255)
+            if (green > 255) {
+                green = 255;
+            } else if (green < 0) {
+                green = 0;
+            }
+
+            if (blue > 255) {
+                blue = 255;
+            } else if (blue < 0) {
+                blue = 0;
+            }
+
+            // Set the new color channels
+            img(i, j, 0) = red;
+            img(i, j, 1) = green;
+            img(i, j, 2) = blue;
+        }
+    }
+    saving(img); // Save the edited image
+}
 
 int main(){
 
@@ -209,8 +238,8 @@ int main(){
         string choice, rotate;
 
         // Display a list of the supported operations to the user
-        cout << "choose what u wanna apply on the Picture\n1)Grayscale\n2)Black and White\n3)Invert Image\n4)Flip Image\n5)Rotate Image\n6)Darken Image\n7)Lighten Image\n8)crop Image\n9)resize Image\n10)skew Image\n11)Exit ^-^\n";
-
+        cout << "choose what u wanna apply on the Picture\n1)Grayscale\n2)Black and White\n3)Invert Image\n4)Flip Image\n5)Rotate Image\n6)Darken Image\n7)Lighten Image\n8)Crop Image\n9)Adding a Frame\n10)Detect Image Edges\n11)Resize Image\n12)Blur Image\n13)Natural Sunlight\n14)Purple Filter\n15)Infrared Filter\n16)Image Skewing\n17)Exit ^-^\n""; 
+            
         // let user enter their choice
         cin >> choice;
 
@@ -332,7 +361,19 @@ int main(){
         else if(choice == "10"){
             skew(img);
         }
-        else if(choice == "11"){
+        else if (choice == "14") {
+            //Purple Filter
+            Purple(img);  // call Purple
+        }
+        else if (choice == "15") {
+            //Infrared Filter
+            Infrared(img);  // call Infrared
+        }
+        else if(choice == "16"){
+            //Skewing Filter
+            skew(img); //call Skew
+        }
+        else if(choice == "17"){
             cout << "Thanks for using app";
             break;
         }

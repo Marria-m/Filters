@@ -117,12 +117,12 @@ void darkenImage(Image& img) {
     saving(img);
 }
 
-void crop(){
+void crop(Image& img){
     int wid , hght;
     std::cout << "Enter the dimension you want as 200 100 (200 is width , 100 is height):";
     std::cin >> wid >> hght;
 
-    Image img1("luffy.jpg");
+    Image img1(Image& img);
     Image img2(wid, hght);
 
     while (wid > img1.width || hght > img1.height||wid <= 0 || hght <= 0) {
@@ -141,12 +141,12 @@ void crop(){
     img2.saveImage("newImage.png");
 }
 
-void resize(){
+void resize(Image& img){
     std::cout << "Enter the dimension you want as 200 100 (200 is width , 100 is height): ";
     int wid , hght ;
     std::cin >> wid >> hght;
 
-    Image img1("luffy.jpg");
+    Image img1(Image& img);
 
     Image img2(wid, hght);
 
@@ -165,7 +165,22 @@ void resize(){
 
 }
 
+void skew(Image& img){
+    Image img1(Image& img);
+    Image img2("newImage.png");
 
+    for(int i = 0 ; i < img1.width ; i++){
+        for(int j = 0 ; j < img1.height ; j++){
+            for(int k = 0 ;k < 3 ; k++){
+                int skew = i + int(j*0.5);
+                if(skew < img2.width){
+                    img2(skew,j,k) = img1(i,j,k);
+                }
+            }
+        }
+    }
+    img2.saveImage("newImage.png");
+}
 
 int main(){
 
@@ -193,7 +208,7 @@ int main(){
         string choice, rotate;
 
         // Display a list of the supported operations to the user
-        cout << "choose what u wanna apply on the Picture\n1)Grayscale\n2)Black and White\n3)Invert Image\n4)Flip Image\n5)Rotate Image\n6)Darken Image\n7)Lighten Image\n8)Exit ^-^\n";
+        cout << "choose what u wanna apply on the Picture\n1)Grayscale\n2)Black and White\n3)Invert Image\n4)Flip Image\n5)Rotate Image\n6)Darken Image\n7)Lighten Image\n8)crop Image\n9)resize Image\n10)skew Image\n11)Exit ^-^\n";
         
         // let user enter their choice
         cin >> choice;
@@ -306,11 +321,22 @@ int main(){
             lightenImage(img);  // call lightenImage
         }
         else if (choice == "8"){
-            // end the program after displaying the statement
-            cout << "Thx for using the app\n";
+            // crop image
+            crop(img);
+        }
+        else if(choice == "9"){
+            // resize img
+            resize(img);
+        }
+        else if(choice == "10"){
+            skew(img);
+        }
+        else if(choice == "11"){
+            cout << "Thanks for using app";
             break;
         }
-        else {  // if the user entered a wrong choice display an error message
+        else {  
+            // if the user entered a wrong choice display an error message
             cout << "wrong! please enter a valid choice\n";
         }
     }

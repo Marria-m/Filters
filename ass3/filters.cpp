@@ -119,9 +119,9 @@ void darkenImage(Image& img) {
 }
 
 void crop(Image& img){
-    int wid , hght;
+    int wid , hght ,x ,y ;
 //    insert the new width and new heigth
-    std::cout << "Enter the dimension you want as 200 100 (200 is width , 100 is height):";
+    std::cout << "Enter the dimension of the point to start with as 200 100 (200 is width , 100 is height):";
     std::cin >> wid >> hght;
 
     Image img1(img);
@@ -130,15 +130,23 @@ void crop(Image& img){
         std::cout << "Error: Enter a valid  dimensions\n";
         std::cin >> wid >> hght;
     }
+    std::cout << "Enter the area to cut as 600 600 (600*600)";
+    cin >> x >> y;
+    while(wid + x > img1.width || wid + x <= 0 || hght + y > img1.height || hght + y <= 0){
+        std::cout << "Out Of Range , please enter a valid area\n";
+        std::cin >> x >> y;
+    }
 //    create a new image to store the editing image
-    Image img2(wid, hght);
+    Image img2(x, y);
 
-    for(int i = 0 ; i < wid ; i++){
-        for(int j = 0 ; j < hght; j++){
+
+    for(int i = 0 ; i < x ; i++){
+        for(int j = 0 ; j < y; j++){
             for(int k = 0 ; k < 3 ; k++) {
-                img2(i, j, k) = img1(i, j, k);
+                img2(i, j, k) = img1(wid + i, hght + j, k);
             }
         }
+
     }
 //    save new image
     saving(img2);

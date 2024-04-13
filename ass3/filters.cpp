@@ -120,35 +120,42 @@ void darkenImage(Image& img) {
 
 void crop(Image& img){
     int wid , hght;
+//    insert the new width and new heigth
     std::cout << "Enter the dimension you want as 200 100 (200 is width , 100 is height):";
     std::cin >> wid >> hght;
 
     Image img1(img);
-    Image img2(wid, hght);
-
-    while (wid > img1.width || hght > img1.height||wid <= 0 || hght <= 0) {
-        std::cerr << "Error: Enter a valid  dimensions\n";
+//    check if new width and new height are valid
+    while (wid > img1.width || hght > img1.height || wid <= 0 || hght <= 0) {
+        std::cout << "Error: Enter a valid  dimensions\n";
         std::cin >> wid >> hght;
     }
+//    create a new image to store the editing image
+    Image img2(wid, hght);
 
     for(int i = 0 ; i < wid ; i++){
-        for(int j = 0 ; j < hght ; j++){
+        for(int j = 0 ; j < hght; j++){
             for(int k = 0 ; k < 3 ; k++) {
                 img2(i, j, k) = img1(i, j, k);
             }
         }
-
     }
+//    save new image
     img2.saveImage("newImage.png");
 }
-
 void resize(Image& img){
+//    take new dimension from user
     std::cout << "Enter the dimension you want as 200 100 (200 is width , 100 is height): ";
     int wid , hght ;
     std::cin >> wid >> hght;
 
     Image img1(img);
-
+    //    check if new width and new height are valid
+    while(wid <= 0 || hght <= 0){
+        std::cout << "Error: Enter a valid  dimensions\n";
+        std::cin >> wid >> hght;
+    }
+    //    create a new image to store the editing image
     Image img2(wid, hght);
 
     for(int i = 0 ; i < wid ; i++){

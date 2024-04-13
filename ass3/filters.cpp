@@ -132,7 +132,7 @@ void crop(Image& img){
     }
     std::cout << "Enter the area to cut as 600 600 (600*600)";
     cin >> x >> y;
-    while(wid + x > img1.width || wid + x <= 0 || hght + y > img1.height || hght + y <= 0){
+    while(wid + x > img1.width || wid + x <= 0 || hght + y > img1.height || hght + y <= 0 || x <= 0 || y <= 0){
         std::cout << "Out Of Range , please enter a valid area\n";
         std::cin >> x >> y;
     }

@@ -141,7 +141,7 @@ void crop(Image& img){
         }
     }
 //    save new image
-    img2.saveImage("newImage.png");
+    saving(img2);
 }
 void resize(Image& img){
 //    take new dimension from user
@@ -169,7 +169,7 @@ void resize(Image& img){
         }
 
     }
-    img2.saveImage("newImage.png");
+    saving(img2);
 
 }
 
@@ -187,7 +187,7 @@ void skew(Image& img){
             }
         }
     }
-    img2.saveImage("newImage.png");
+    saving(img2);
 }
 void Infrared(Image& img) {
     for (int i = 0; i < img.width; ++i) {

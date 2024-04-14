@@ -16,7 +16,7 @@
 
 // ID1: 20231160 – Invert filter, Flip filter, Rotate filter, Frames filter, Blur filter, Natural Sunlight filter.
 
-// ID2: 20231089 – Black and white filter, Crop filter, Resize filter, Skew filter.  
+// ID2: 20231089 – Black and white filter, Crop filter, Resize filter.  
 
 // ID3: 20231056 – Grayscale filter, Merge filter, Lighten filter, Darken filter, Edges filter, Purple filter, Infrared filter. 
 
@@ -816,29 +816,6 @@ void Infrared(Image& img) {
         }
     }
 }
-
-
-// Doha Yasser
-void skew(Image& img){
-    //store an original image
-    Image img1(img);
-    //  create a new image to store the editing image
-    Image img2(int(1.5*img1.width), img1.height);
-    // loop on pixels
-    for(int i = 0 ; i < img1.width ; i++){
-        for(int j = 0 ; j < img1.height ; j++){
-            for(int k = 0 ;k < 3 ; k++){
-                // width of pixel + half of height
-                int skew = i + int(j*0.5);
-                if(skew < img1.width){
-                    img1(skew,j,k) = img1(i,j,k);
-                }
-            }
-        }
-    }
-    img = img1;
-}
-
 
 
 int main() {

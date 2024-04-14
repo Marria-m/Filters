@@ -112,6 +112,8 @@ void mergeOption1(Image& firstImage, Image& secondImage) {
             }
         }
     }
+
+    firstImage = mergedImage;
 }
 
 // Function for Option 2: Merge by resizing the common area of the smaller width and height
@@ -132,6 +134,7 @@ void mergeOption2(Image& firstImage, Image& secondImage) {
             }
         }
     }
+    firstImage = mergedImage;
 }
 
 
@@ -872,18 +875,15 @@ int main() {
                 }
             }
 
-            // Load the first image
-            Image firstImage(file_name);
-
             // Load the second image
             Image secondImage(secondImageName);
 
             // Perform merge operation based on the chosen option
             if (mergeOption == 1) {
-                mergeOption1(firstImage, secondImage);
+                mergeOption1(original_img, secondImage);
             }
             else if (mergeOption == 2) {
-                mergeOption2(firstImage, secondImage);
+                mergeOption2(original_img, secondImage);
             }
         }
         else if (choice == "5") {
@@ -1019,4 +1019,3 @@ int main() {
 // take the dimensions of the area to cut.
 // check if the dimensions of the area is valid.
 // This area is cut and stored in a new image.
-

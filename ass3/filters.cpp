@@ -14,7 +14,7 @@ void validname(string& file_name){
 
 void saving(Image& img){
     // Function to save the edited image
-    
+
     string file_name;
     // Prompt the user to enter the image name and extension
     cout << "Pls enter image name to store new image\n";
@@ -22,9 +22,9 @@ void saving(Image& img){
     cin >> file_name;
 
     validname(file_name);
-    
+
     img.saveImage(file_name);  // Save the edited image
-    
+
     // Display the saved image using the system command
     system(file_name.c_str());
 }
@@ -48,7 +48,6 @@ void GrayScale(Image& img) {
             }
         }
     }
-    saving(img);
 }
 
 
@@ -67,7 +66,18 @@ void black_white(Image& img){
             }
         }
     }
-    saving(img);
+}
+
+
+void invert_filter(Image& img){
+    for (int i = 0; i < img.width; ++i) {
+        for (int j = 0; j < img.height; ++j) {
+            // subtract the colour from 255 to get the complement of the colour
+            img(i, j, 0) = 255 - img(i, j, 0);
+            img(i, j, 1) = 255 - img(i, j, 1);
+            img(i, j, 2) = 255 - img(i, j, 2);
+        }
+    }
 }
 
 
@@ -81,13 +91,13 @@ void rotate90Degrees(Image& img, Image& new_img){
             }
         }
     }
-    
+
     // Loop through each row of the new image
     for (int t = 0; t < new_img.height - 1; ++t){
         // Initialize left and right pointers for horizontal flipping
         int l = 0;
         int r = new_img.width - 1;
-        
+
         while (l < r){  // flip until the left pointer crosses the right pointer
             // Swap pixel data to perform horizontal flip
             swap(new_img(l, t, 0), new_img(r, t, 0));
@@ -98,6 +108,7 @@ void rotate90Degrees(Image& img, Image& new_img){
             r--;
         }
     }
+    img = new_img;
 }
 
 
@@ -116,7 +127,6 @@ void lightenImage(Image& img) {
             }
         }
     }
-    saving(img);
 }
 
 
@@ -135,28 +145,26 @@ void darkenImage(Image& img) {
             }
         }
     }
-
-    saving(img);
 }
 
 void crop(Image& img){
     int wid , hght ,x ,y ;
 //    insert the new width and new heigth
-    std::cout << "Enter the dimension of the point to start with as 200 100 (200 is width , 100 is height):";
-    std::cin >> wid >> hght;
+    cout << "Enter the dimension of the point to start with as 200 100 (200 is width , 100 is height):";
+    cin >> wid >> hght;
 
     Image img1(img);
 //    check if new width and new height are valid
     while (wid > img1.width || hght > img1.height || wid <= 0 || hght <= 0) {
-        std::cout << "Error: Enter a valid  dimensions\n";
-        std::cin >> wid >> hght;
+        cout << "Error: Enter a valid  dimensions\n";
+        cin >> wid >> hght;
     }
-    std::cout << "Enter the area to cut as 600 600 (600*600)";
+    cout << "Enter the area to cut as 600 600 (600*600)";
     cin >> x >> y;
     // check if in range
     while(wid + x > img1.width || wid + x <= 0 || hght + y > img1.height || hght + y <= 0 || x <= 0 || y <= 0){
-        std::cout << "Out Of Range , please enter a valid area\n";
-        std::cin >> x >> y;
+        cout << "Out Of Range , please enter a valid area\n";
+        cin >> x >> y;
     }
 //    create a new image to store the editing image
     Image img2(x, y);
@@ -165,21 +173,20 @@ void crop(Image& img){
     for(int i = 0 ; i < x ; i++){
         for(int j = 0 ; j < y; j++){
             for(int k = 0 ; k < 3 ; k++) {
-                // to make the first pixel in new image as the starting point in the origanal image 
-                img2(i, j, k) = img1(wid + i, hght + j, k); 
+                // to make the first pixel in new image as the starting point in the origanal image
+                img2(i, j, k) = img1(wid + i, hght + j, k);
             }
         }
 
     }
-//    save new image
-    saving(img2);
+    img = img2;
 }
 
 
 void rightleft_frame(Image& img, int w, int R, int G, int B){
     // Create a new image with extended width to accommodate the frame
     Image img2 (img.width + (w * 2), img.height);
-    
+
     // Fill the entire new image with the specified color for the frame
     for (int i = 0; i < img2.width; i++) {
         for (int j = 0; j < img2.height; j++){
@@ -197,8 +204,7 @@ void rightleft_frame(Image& img, int w, int R, int G, int B){
             }
         }
     }
-
-    saving(img2);
+    img = img2;
 }
 
 
@@ -223,8 +229,7 @@ void topbot_frame(Image& img, int w, int R, int G, int B){
             }
         }
     }
-    
-    saving(img2);
+    img = img2;
 }
 
 
@@ -237,7 +242,7 @@ void simple_frame(Image& img,Image& img2, int w, int R, int G, int B){
             img2(i, j, 2) = B;
         }
     }
-    
+
     // Copy the original image onto the new image, leaving space for the frame
     for (int i = 0; i < img.height - 1; ++i){
         for (int j = 0; j < img.width - 1; ++j){
@@ -250,9 +255,9 @@ void simple_frame(Image& img,Image& img2, int w, int R, int G, int B){
 }
 
 
-void fancy_frame(Image& img, Image& img2, int R, int G, int B){
+void fancy_frame(Image& img, Image& img2, int R, int G, int B) {
     // Create a simple frame around the original image
-    simple_frame(img,img2, 50, R, G, B);
+    simple_frame(img, img2, 50, R, G, B);
 
     // Variables for left, top, right positions of the frame
     int l = 10;
@@ -267,21 +272,19 @@ void fancy_frame(Image& img, Image& img2, int R, int G, int B){
                 l--;
                 r++;
                 t--;
-            }
-            else if (t == 0) {
+            } else if (t == 0) {
                 t = 12;
-            }
-            else {
+            } else {
                 l++;
                 r--;
                 t--;
             }
             for (int k = 0; k < 3; k++) {
-                // Invert colors of selected pixels so it will appear whatever the color is
+                // Invert colors of selected pixels, so it will appear whatever the color is
                 img2(l, i, k) = 255 - img2(l, i, k);
                 img2(r, i, k) = 255 - img2(r, i, k);
                 img2(l + 10, i, k) = 255 - img2(l + 10, i, k);
-                img2(r - 10, i, k) = 255 - img2( r - 10, i, k);
+                img2(r - 10, i, k) = 255 - img2(r - 10, i, k);
             }
         }
         // Adjust frame positions for the next iteration
@@ -291,7 +294,7 @@ void fancy_frame(Image& img, Image& img2, int R, int G, int B){
 
     // Variables for top and bottom positions of the frame
     int top = 10;
-    int bot = img2.width - 1 ;
+    int bot = img2.width - 1;
     t = 12;
 
     // Loop to create a fancy pattern on the left and right sides of the frame
@@ -302,11 +305,9 @@ void fancy_frame(Image& img, Image& img2, int R, int G, int B){
                 top--;
                 bot++;
                 t--;
-            }
-            else if (t == 0) {
+            } else if (t == 0) {
                 t = 12;
-            }
-            else {
+            } else {
                 top++;
                 bot--;
                 t--;
@@ -316,7 +317,7 @@ void fancy_frame(Image& img, Image& img2, int R, int G, int B){
                 // Invert colors of selected pixels
                 img2(i, top, k) = 255 - img2(i, top, k);
                 img2(i, top + 10, k) = 255 - img2(i, top + 10, k);
-                img2(i, bot, k) = 255 - img2(i, bot, k) ;
+                img2(i, bot, k) = 255 - img2(i, bot, k);
                 img2(i, bot - 10, k) = 255 - img2(i, bot - 10, k);
 
             }
@@ -326,7 +327,7 @@ void fancy_frame(Image& img, Image& img2, int R, int G, int B){
         bot -= 5 / 2;
     }
 
-    saving(img2);
+    img = img2;
 }
 
 
@@ -348,7 +349,7 @@ void colourchoice(int& r, int& g, int& b){
     // Set the RGB values based on the user's color choice
     if (col == "1")  // Black
         r = g = b = 0;
-    else if (col == "2")  // white 
+    else if (col == "2")  // white
         r = g = b = 255;
     else if (col == "3")  // gray
         r = g = b = 155;
@@ -403,7 +404,7 @@ void frame_filter(Image& img){
         // Create a new image with a simple frame and save it
         Image img2(img.width + (wight * 2), img.height + (wight * 2));
         simple_frame(img, img2, wight, r, g, b);  // apply simple frame
-        saving(img2);
+        img = img2;
     }
     else if (choice == "4"){
         // Create a new image with a fancy frame and save it
@@ -442,8 +443,7 @@ void resize(Image& img){
         }
 
     }
-    saving(img2);
-
+    img = img2;
 }
 
 
@@ -474,24 +474,25 @@ void Infrared(Image& img) {
             img(i, j, 2) = blue;
         }
     }
-    saving(img); // Save the edited image
 }
 
 
 void Purple(Image& img) {
     for (int i = 0; i < img.width; ++i) {
         for (int j = 0; j < img.height; ++j) {
-            // Increase the intensity of red and blue channels and decrease the green 
+            // Increase the intensity of red and blue channels and decrease the green
             unsigned int red = img(i, j, 0) * 1.5; // Increase red channel
             unsigned int green = img(i, j, 1) * 0.7; // Decrease green channel
             unsigned int blue = img(i, j, 2) * 1.5; // Increase blue channel
-            
+
             // Ensure that values are in the valid range (0 to 255)
             if (red > 255){
                 red = 255;
-            }if (blue > 255){
+            }
+            if (blue > 255){
                 blue = 255;
-            }if (green < 0){
+            }
+            if (green < 0){
                 green = 0;
             }
 
@@ -501,12 +502,11 @@ void Purple(Image& img) {
             img(i, j, 2) = blue;
         }
     }
-    saving(img); // Save the edited image
 }
 
 
 void skew(Image& img){
-    //store an original image 
+    //store an original image
     Image img1(img);
     //  create a new imgae to store the editting image
     Image img2("newImage.png");
@@ -514,7 +514,7 @@ void skew(Image& img){
     for(int i = 0 ; i < img1.width ; i++){
         for(int j = 0 ; j < img1.height ; j++){
             for(int k = 0 ;k < 3 ; k++){
-                // width of pixel + half of height 
+                // width of pixel + half of height
                 int skew = i + int(j*0.5);
                 if(skew < img2.width){
                     img2(skew,j,k) = img1(i,j,k);
@@ -522,24 +522,30 @@ void skew(Image& img){
             }
         }
     }
-    saving(img2);
+    img = img2;
 }
 
 
 
 int main(){
 
+    // let user enter the image file name
+    string file_name;
+    cout << "plz enter the name of the image: \n";
+    cin >> file_name;
+    validname(file_name);
+    Image original_img(file_name);
+
+    while (original_img.imageData == nullptr) {
+        // Error handling for failed image loading
+        cout << "Failed to load image." << endl;
+    }
+
+    cout << "loaded successfully..\n";
+
     while(true){
-        // let user enter the image file name
-        string file_name;
-        cout << "plz enter the name of the image: \n";
-        cin >> file_name;
-
-        // Read the image and store it to 'img'
-        Image img(file_name);
-
         // Create a new image 'new_img' that the height of 'img' is the width of 'new_img' and width of 'img' is the height of 'new_img'
-        Image new_img(img.height, img.width);
+        Image new_img(original_img.height, original_img.width);
 
         // Fill the 'new_img' with black pixels
         for (int i = 0; i < new_img.width; i++) {
@@ -553,29 +559,20 @@ int main(){
         string choice, rotate;
 
         // Display a list of the supported operations to the user
-        cout << "choose what u wanna apply on the Picture\n1)Grayscale\n2)Black and White\n3)Invert Image\n4)merge two images\n5)Flip Image\n6)Rotate Image\n7)Darken Image\n8)Lighten Image\n9)Crop Image\n10)Adding a Frame\n11)Detect Image Edges\n12)Resize Image\n13)Blur Image\n14)Natural Sunlight\n15)Purple Filter\n16)Infrared Filter\n17)Image Skewing\n18)Save the image\n19)Exit without saving\n"; 
-        cout << "enter ur choice: ";    
+        cout << "choose what u wanna apply on the Picture\n1)Grayscale\n2)Black and White\n3)Invert Image\n4)merge two images\n5)Flip Image\n6)Rotate Image\n7)Darken Image\n8)Lighten Image\n9)Crop Image\n10)Adding a Frame\n11)Detect Image Edges\n12)Resize Image\n13)Blur Image\n14)Natural Sunlight\n15)Purple Filter\n16)Infrared Filter\n17)Image Skewing\n18)Save the image\n19)Exit without saving\n";
+        cout << "enter ur choice: ";
         // let user enter their choice
         cin >> choice;
 
         if (choice == "1"){
-            GrayScale(img);  // Call grayscale function
+            GrayScale(original_img);  // Call grayscale function
         }
         else if (choice == "2"){
-            black_white(img);  // Call black and white conversion function
+            black_white(original_img);  // Call black and white conversion function
         }
         else if (choice == "3"){
             // invert color channels
-            for (int i = 0; i < img.width; ++i) {
-                for (int j = 0; j < img.height; ++j) {
-                    // subtract the colour from 255 to get the complement of the colour
-                    img(i, j, 0) = 255 - img(i, j, 0);
-                    img(i, j, 1) = 255 - img(i, j, 1);
-                    img(i, j, 2) = 255 - img(i, j, 2);
-
-                }
-            }
-            saving(img);
+            invert_filter(original_img);
         }
 
         else if(choice == "4"){
@@ -584,35 +581,33 @@ int main(){
             cin >> rotate;
             if (rotate == "1"){
                 // Flip vertically
-                for (int t = 0; t < img.width - 1; ++t){  // loop on image width to flip each colomn
+                for (int t = 0; t < original_img.width - 1; ++t){  // loop on image width to flip each colomn
                     // initialize 2 variables 'top' is the top of the image in one colomn and 'bot' is the last pixel in one colomn
                     int top = 0;
-                    int bot = img.height - 1;
+                    int bot = original_img.height - 1;
                     while (top < bot){  // stop if top = bot
-                        swap(img(t, top, 0), img(t, bot, 0));
-                        swap(img(t, top, 1), img(t, bot, 1));
-                        swap(img(t, top, 2), img(t, bot, 2));
+                        swap(original_img(t, top, 0), original_img(t, bot, 0));
+                        swap(original_img(t, top, 1), original_img(t, bot, 1));
+                        swap(original_img(t, top, 2), original_img(t, bot, 2));
                         top++;
                         bot--;
                     }
                 }
-                saving(img);
             }
             else if (rotate == "2"){
                 // flip image horizontally
-                for (int t = 0; t < img.height - 1; ++t){  // loop on image hight to flip each row
+                for (int t = 0; t < original_img.height - 1; ++t){  // loop on image hight to flip each row
                     // initialize 2 variables 'l' is the left pixel of the image in one row and 'r' is the right pixel in one row
                     int l = 0;
-                    int r = img.width - 1;
+                    int r = original_img.width - 1;
                     while (l < r){
-                        swap(img(l, t, 0), img(r, t, 0));
-                        swap(img(l, t, 1), img(r, t, 1));
-                        swap(img(l, t, 2), img(r, t, 2));
+                        swap(original_img(l, t, 0), original_img(r, t, 0));
+                        swap(original_img(l, t, 1), original_img(r, t, 1));
+                        swap(original_img(l, t, 2), original_img(r, t, 2));
                         l++;
                         r--;
                     }
                 }
-                saving(img);
             }
             else {  // if the user entered wrong choice
                 cout << "wrong! please enter a valid choice\n";
@@ -628,29 +623,24 @@ int main(){
 
             if (rotate == "1"){
                 // rotate image by 90 degrees
-                rotate90Degrees(img, new_img);  // call deg90 function
-                saving(new_img);
+                rotate90Degrees(original_img, new_img);  // call deg90 function
             }
 
             else if (rotate == "2"){
                 // rotate image by 180 degrees by rotating the original image 90 degrees for two times
 
                 // call deg90 function 2 times
-                rotate90Degrees(img, new_img);
-                rotate90Degrees(new_img, img);
-
-                saving(img);
+                rotate90Degrees(original_img, new_img);
+                rotate90Degrees(original_img, new_img);
             }
 
             else if (rotate == "3"){
                 // rotate image by 270 degrees by rotating the original image 90 degrees for three times
 
                 // call deg90 function 3 times
-                rotate90Degrees(img, new_img);
-                rotate90Degrees(new_img, img);
-                rotate90Degrees(img, new_img);
-
-                saving(new_img);
+                rotate90Degrees(original_img, new_img);
+                rotate90Degrees(original_img, new_img);
+                rotate90Degrees(original_img, new_img);
             }
 
             else {  // if the user entered wrong choice
@@ -659,36 +649,41 @@ int main(){
         }
         else if (choice == "6"){
             // darken the image by 50%
-            darkenImage(img);  // call darkenImage
+            darkenImage(original_img);  // call darkenImage
         }
         else if (choice == "7"){
             // lighten the image by 50%
-            lightenImage(img);  // call lightenImage
+            lightenImage(original_img);  // call lightenImage
         }
         else if (choice == "8"){
             // crop image
-            crop(img);
+            crop(original_img);
         }
         else if(choice == "9"){
             // resize img
-            resize(img);
+            resize(original_img);
         }
         else if(choice == "10"){
-            frame_filter(img);  // apply frame filter
+            frame_filter(original_img);  // apply frame filter
         }
         else if (choice == "14") {
             //Purple Filter
-            Purple(img);  // call Purple
+            Purple(original_img);  // call Purple
         }
         else if (choice == "15") {
             //Infrared Filter
-            Infrared(img);  // call Infrared
+            Infrared(original_img);  // call Infrared
         }
         else if(choice == "16"){
             //Skewing Filter
-            skew(img); //call Skew
+            skew(original_img); //call Skew
         }
         else if(choice == "17"){
+            saving(original_img);
+            cout << "Thanks for using app";
+            break;
+        }
+        else if (choice == "18"){
             cout << "Thanks for using app";
             break;
         }
@@ -708,5 +703,3 @@ int main(){
 // take the dimensions of the area to cut.
 // check if the dimensions of the area is valid.
 // This area is cut and stored in a new image.
-
-

@@ -553,8 +553,8 @@ int main(){
         string choice, rotate;
 
         // Display a list of the supported operations to the user
-        cout << "choose what u wanna apply on the Picture\n1)Grayscale\n2)Black and White\n3)Invert Image\n4)Flip Image\n5)Rotate Image\n6)Darken Image\n7)Lighten Image\n8)Crop Image\n9)Adding a Frame\n10)Detect Image Edges\n11)Resize Image\n12)Blur Image\n13)Natural Sunlight\n14)Purple Filter\n15)Infrared Filter\n16)Image Skewing\n17)Exit ^-^\n"; 
-            
+        cout << "choose what u wanna apply on the Picture\n1)Grayscale\n2)Black and White\n3)Invert Image\n4)merge two images\n5)Flip Image\n6)Rotate Image\n7)Darken Image\n8)Lighten Image\n9)Crop Image\n10)Adding a Frame\n11)Detect Image Edges\n12)Resize Image\n13)Blur Image\n14)Natural Sunlight\n15)Purple Filter\n16)Infrared Filter\n17)Image Skewing\n18)Save the image\n19)Exit without saving\n"; 
+        cout << "enter ur choice: ";    
         // let user enter their choice
         cin >> choice;
 
@@ -674,7 +674,7 @@ int main(){
             resize(img);
         }
         else if(choice == "10"){
-            skew(img);
+            frame_filter(img);  // apply frame filter
         }
         else if (choice == "14") {
             //Purple Filter

@@ -95,7 +95,7 @@ void resizeMerge(Image& img, Image& resizedImg, int width, int height) {
 }
 
 // Function for Option 1: Merge by resizing the smaller image or both images to the biggest height and width
-void mergeOption1(Image& firstImage, Image& secondImage, const string& filename) {
+void mergeOption1(Image& firstImage, Image& secondImage) {
     // Calculate the dimensions of the merged image
     int maxWidth = max(firstImage.width, secondImage.width);
     int maxHeight = max(firstImage.height, secondImage.height);
@@ -112,13 +112,10 @@ void mergeOption1(Image& firstImage, Image& secondImage, const string& filename)
             }
         }
     }
-
-    // Save the merged image
-    mergedImage.saveImage(filename + "_option1.jpg");
 }
 
 // Function for Option 2: Merge by resizing the common area of the smaller width and height
-void mergeOption2(Image& firstImage, Image& secondImage, const string& filename) {
+void mergeOption2(Image& firstImage, Image& secondImage) {
     // Calculate the dimensions of the merged image
     int minWidth = min(firstImage.width, secondImage.width);
     int minHeight = min(firstImage.height, secondImage.height);
@@ -135,9 +132,6 @@ void mergeOption2(Image& firstImage, Image& secondImage, const string& filename)
             }
         }
     }
-
-    // Save the merged image
-    mergedImage.saveImage(filename + "_option2.jpg");
 }
 
 
@@ -509,6 +503,225 @@ void resize(Image& img){
 }
 
 
+void top_left_corner(Image& image) {
+    int red = 0;
+    int green = 0;
+    int blue = 0;
+    int count = 0;
+    for (int x = 0; x <= 1; x++) {   // from 0 to reach 1 (what is after this pixel)
+        red += image(x, 0, 0);
+        green += image(x, 0, 1);
+        blue += image(x, 0, 2);
+        count++;
+
+    }
+
+    image(0, 0, 0) = red / count;
+    image(0, 0, 1) = green / count;
+    image(0, 0, 2) = blue / count;
+
+}
+
+
+void top_right_corner(Image &image) {
+    int red = 0;
+    int green = 0;
+    int blue = 0;
+    int count = 0;
+
+    for (int x = 0; x <= 1; x++) {   // from 0 to reach 1 (what is after this pixel)
+        for (int y = 0; y <= 1; y++) {  // same as the first loop
+            red += image(image.width - 1 - x, y, 0);
+            green += image(image.width - 1 - x,  y, 1);
+            blue += image(image.width - 1 - x,  y, 2);
+            count++;
+        }
+    }
+
+    image(image.width - 1, 0, 0) = red / count;
+    image(image.width - 1, 0, 1) = green / count;
+    image(image.width - 1, 0, 2) = blue / count;
+
+}
+
+
+void down_right_corner(Image &image) {
+    int red = 0;
+    int green = 0;
+    int blue = 0;
+    int count = 0;
+
+    for (int x = -1; x < 1; x++) {   // from -1 (what before this pixel) to reach 0
+        for (int y = -1; y < 1; y++) {  // same as the first loop
+            red += image(image.width - 1 - x, image.height - 1 - y, 0);
+            green += image(image.width - 1 - x, image.height - 1 - y, 1);
+            blue += image(image.width - 1 - x, image.height - 1 - y, 2);
+            count++;
+        }
+    }
+
+    image(image.width - 1, image.height - 1, 0) = red / count;
+    image(image.width - 1, image.height - 1, 1) = green / count;
+    image(image.width - 1, image.height - 1, 2) = blue / count;
+
+}
+
+
+void down_left_corner(Image &image) {
+    int red = 0;
+    int green = 0;
+    int blue = 0;
+    int count = 0;
+
+    for (int x = 0; x <= 1; x++) {   // from 0 to reach 1 (what is after this pixel)
+        for (int y = -1; y < 1; y++) {  // from -1 (what is before the pixel) till the exist pixel
+            red += image(x, image.height - 1 + y, 0);
+            green += image(x, image.height - 1 + y, 1);
+            blue += image(x, image.height - 1 + y, 2);
+            count++;
+        }
+    }
+
+    image(0, image.height - 1, 0) = red / count;
+    image(0, image.height - 1, 1) = green / count;
+    image(0, image.height - 1, 2) = blue / count;
+}
+
+
+void top(Image &image) {
+    int red = 0;
+    int green = 0;
+    int blue = 0;
+    int count = 0;
+    for (int i = 1; i < image.width - 2; i++) {
+        for (int j = 0; j < 1; j++) {
+
+            for (int x = -1; x <= 1; x++) {   // from -1 (what before this pixel) to reach 1 (what is after this pixel)
+                for (int y = 0; y <= 1; y++) {  // from 0 to reach 1 (what is after this pixel)
+                    red += image(i + x, j + y, 0);
+                    green += image(i + x, j + y, 1);
+                    blue += image(i + x, j + y, 2);
+                    count++;
+                }
+            }
+
+
+            image(i, j, 0) = red / count;
+            image(i, j, 1) = green / count;
+            image(i, j, 2) = blue / count;
+        }
+    }
+}
+
+
+void apply_blur(Image &image) {
+    int rd;
+    int grn;
+    int bl;
+    int cnt;
+
+    for (int i = 1; i < image.width - 1; i++) {
+        for (int j = 1; j < image.height - 1; j++) {
+            rd = 0;
+            grn = 0;
+            bl = 0;
+            cnt = 0;
+
+            // get all pixel values around this pixel
+            for (int x = -1; x <= 1; x++) {
+                for (int y = -1; y <= 1; y++) {
+                    rd += image(i + x, j + y, 0);
+                    grn += image(i + x, j + y, 1);
+                    bl += image(i + x, j + y, 2);
+                    cnt++;
+                }
+            }
+
+            // Average of the sum
+            image(i, j, 0) = rd / cnt;
+            image(i, j, 1) = grn / cnt;
+            image(i, j, 2) = bl / cnt;
+        }
+    }
+
+    top_right_corner(image);
+    top_left_corner(image);
+    down_right_corner(image);
+    down_left_corner(image);
+    top(image);
+
+}
+
+
+void blur_filter(Image& img){
+    cout << "choose from the next...\n";
+    cout << "1) blur by 20%\n";
+    cout << "2) blur by 50%\n";
+    cout << "3) blur by 100% (this will take time, please wait ^-^)\n";
+    cout << "Enter your choice here: ";
+    string nBlurring;
+    cin >> nBlurring;
+
+    while (nBlurring != "1" && nBlurring != "2" && nBlurring != "3"){
+        cout << "please enter a right choice: ";
+        cin >> nBlurring;
+    }
+
+    if (nBlurring == "1"){
+        for (int n = 0; n < 10; n++) {
+            apply_blur(img);
+        }
+    }
+    else if (nBlurring == "2"){
+        for (int n = 0; n < 40; n++) {
+            apply_blur(img);
+        }
+    }
+    else if (nBlurring == "3"){
+        for (int n = 0; n < 60; n++) {
+            apply_blur(img);
+        }
+    }
+
+}
+
+
+void NaturalSunlight(Image& image){
+    for (int i = 0; i < image.width; ++i) {
+        for (int j = 0; j < image.height; ++j) {
+            unsigned int avg = 0; // Initialize average value
+
+            // Calculate the average intensity
+            for (int k = 0; k < 3; ++k) {
+                avg += image(i, j, k);
+            }
+
+            // Adjust pixel intensities to simulate natural sunlight
+            int red = image(i, j, 0) + 30;  // Increase red channel intensity
+            int green = image(i, j, 1) + 30;  // Increase green channel intensity
+            int blue = image(i, j, 2) - 30;  // Decrease blue channel intensity
+
+            // ensure intensity doesn't go out of range from 0 to 255
+            if (red > 255){
+                red = 255;
+            }
+            if (green > 255){
+                green = 255;
+            }
+            if (blue < 0){
+                blue = 0;
+            }
+
+            // Update the pixel intensities
+            image(i, j, 0) = red;
+            image(i, j, 1) = green;
+            image(i, j, 2) = blue;
+        }
+    }
+
+}
+
+
 void Infrared(Image& img) {
     for (int i = 0; i < img.width; ++i) {
         for (int j = 0; j < img.height; ++j) {
@@ -589,7 +802,7 @@ void skew(Image& img){
 
 
 
-int main(){
+int main() {
 
     // let user enter the image file name
     string file_name;
@@ -605,19 +818,20 @@ int main(){
 
     cout << "loaded successfully..\n";
 
-    while(true){
-        // Create a new image 'new_img' that the height of 'img' is the width of 'new_img' and width of 'img' is the height of 'new_img'
-        Image new_img(original_img.height, original_img.width);
+    // Create a new image 'new_img' that the height of 'img' is the width of 'new_img' and width of 'img' is the height of 'new_img'
+    Image new_img(original_img.height, original_img.width);
 
-        // Fill the 'new_img' with black pixels
-        for (int i = 0; i < new_img.width; i++) {
-            for (int j = 0; j < new_img.height; j++){
-                for (int k = 0; k < 3; k++){
-                    new_img(i, j, k) = 0;
-                }
+    // Fill the 'new_img' with black pixels
+    for (int i = 0; i < new_img.width; i++) {
+        for (int j = 0; j < new_img.height; j++) {
+            for (int k = 0; k < 3; k++) {
+                new_img(i, j, k) = 0;
             }
         }
+    }
 
+
+    while (true) {
         string choice, rotate;
 
         // Display a list of the supported operations to the user
@@ -626,71 +840,63 @@ int main(){
         // let user enter their choice
         cin >> choice;
 
-        if (choice == "1"){
+        if (choice == "1") {
             GrayScale(original_img);  // Call grayscale function
         }
-        else if (choice == "2"){
+        else if (choice == "2") {
             black_white(original_img);  // Call black and white conversion function
         }
-        else if (choice == "3"){
+        else if (choice == "3") {
             // invert color channels
             invert_filter(original_img);
         }
-        else if (choice == "4"){
+        else if (choice == "4") {
             string firstImageName, secondImageName, filename;
-    int mergeOption;
+            int mergeOption;
 
-    // Get the paths of the images to be merged
-    cout << "Enter the name of the first image: ";
-    cin >> firstImageName;
-    cout << "Enter the name of the second image: ";
-    cin >> secondImageName;
-    cout << "Enter the filename to save the final image: ";
-    cin >> filename;
+            // Get the paths of the images to be merged
+            cout << "Enter the name of the second image: ";
+            cin >> secondImageName;
 
-    // Choose merge option
-    while (true) {
-        cout << "Choose merge option:\n";
-        cout << "1. Merge by resizing the smaller image or both images to the biggest height and width\n";
-        cout << "2. Merge by resizing the common area of the smaller width and height\n";
-        cin >> mergeOption;
+            // Choose merge option
+            while (true) {
+                cout << "Choose merge option:\n";
+                cout << "1. Merge by resizing the smaller image or both images to the biggest height and width\n";
+                cout << "2. Merge by resizing the common area of the smaller width and height\n";
+                cin >> mergeOption;
 
-        if (mergeOption == 1 || mergeOption == 2) {
-            break;
-        } else {
-            cout << "Invalid merge option. Please enter a valid option.\n";
+                if (mergeOption == 1 || mergeOption == 2) {
+                    break;
+                } else {
+                    cout << "Invalid merge option. Please enter a valid option.\n";
+                }
+            }
+
+            // Load the first image
+            Image firstImage(file_name);
+
+            // Load the second image
+            Image secondImage(secondImageName);
+
+            // Perform merge operation based on the chosen option
+            if (mergeOption == 1) {
+                mergeOption1(firstImage, secondImage);
+            }
+            else if (mergeOption == 2) {
+                mergeOption2(firstImage, secondImage);
+            }
         }
-    }
-
-    // Load the first image
-    Image firstImage(firstImageName);
-
-    // Load the second image
-    Image secondImage(secondImageName);
-
-    // Perform merge operation based on the chosen option
-    if (mergeOption == 1) {
-        mergeOption1(firstImage, secondImage, filename);
-    } else if (mergeOption == 2) {
-        mergeOption2(firstImage, secondImage, filename);
-    }
-
-    return 0;
-}
-
-        }    
-
-        else if(choice == "4"){
+        else if (choice == "5") {
             // allow user to choose horizontal or vertical flip
             cout << "Flip the image...\n1)Vertical\n2)Horizontal\n";
             cin >> rotate;
-            if (rotate == "1"){
+            if (rotate == "1") {
                 // Flip vertically
-                for (int t = 0; t < original_img.width - 1; ++t){  // loop on image width to flip each colomn
+                for (int t = 0; t < original_img.width - 1; ++t) {  // loop on image width to flip each colomn
                     // initialize 2 variables 'top' is the top of the image in one colomn and 'bot' is the last pixel in one colomn
                     int top = 0;
                     int bot = original_img.height - 1;
-                    while (top < bot){  // stop if top = bot
+                    while (top < bot) {  // stop if top = bot
                         swap(original_img(t, top, 0), original_img(t, bot, 0));
                         swap(original_img(t, top, 1), original_img(t, bot, 1));
                         swap(original_img(t, top, 2), original_img(t, bot, 2));
@@ -699,13 +905,13 @@ int main(){
                     }
                 }
             }
-            else if (rotate == "2"){
+            else if (rotate == "2") {
                 // flip image horizontally
-                for (int t = 0; t < original_img.height - 1; ++t){  // loop on image hight to flip each row
+                for (int t = 0; t < original_img.height - 1; ++t) {  // loop on image hight to flip each row
                     // initialize 2 variables 'l' is the left pixel of the image in one row and 'r' is the right pixel in one row
                     int l = 0;
                     int r = original_img.width - 1;
-                    while (l < r){
+                    while (l < r) {
                         swap(original_img(l, t, 0), original_img(r, t, 0));
                         swap(original_img(l, t, 1), original_img(r, t, 1));
                         swap(original_img(l, t, 2), original_img(r, t, 2));
@@ -718,28 +924,25 @@ int main(){
                 cout << "wrong! please enter a valid choice\n";
             }
         }
-
-        else if (choice == "5"){
+        else if (choice == "6") {
             // display a menu to let the user choose the degree they want to rotate by
             cout << "rotate the image clockwise by..\n1)90 degree\n2)180 degree\n3)270 degree\n";
 
             // let the user choose the degree
             cin >> rotate;
 
-            if (rotate == "1"){
+            if (rotate == "1") {
                 // rotate image by 90 degrees
                 rotate90Degrees(original_img, new_img);  // call deg90 function
             }
-
-            else if (rotate == "2"){
+            else if (rotate == "2") {
                 // rotate image by 180 degrees by rotating the original image 90 degrees for two times
 
                 // call deg90 function 2 times
                 rotate90Degrees(original_img, new_img);
                 rotate90Degrees(original_img, new_img);
             }
-
-            else if (rotate == "3"){
+            else if (rotate == "3") {
                 // rotate image by 270 degrees by rotating the original image 90 degrees for three times
 
                 // call deg90 function 3 times
@@ -747,49 +950,57 @@ int main(){
                 rotate90Degrees(original_img, new_img);
                 rotate90Degrees(original_img, new_img);
             }
-
             else {  // if the user entered wrong choice
                 cout << "wrong! please enter a valid choice\n";
             }
         }
-        else if (choice == "6"){
+        else if (choice == "7") {
             // darken the image by 50%
             darkenImage(original_img);  // call darkenImage
         }
-        else if (choice == "7"){
+        else if (choice == "8") {
             // lighten the image by 50%
             lightenImage(original_img);  // call lightenImage
         }
-        else if (choice == "8"){
+        else if (choice == "9") {
             // crop image
             crop(original_img);
         }
-        else if(choice == "9"){
+        else if (choice == "10") {
+            frame_filter(original_img);  // apply frame filter
+        }
+        else if (choice == "11"){
+            cout << "Rahma, put the edges filter here ^-^\n";
+        }
+        else if (choice == "12") {
             // resize img
             resize(original_img);
         }
-        else if(choice == "10"){
-            frame_filter(original_img);  // apply frame filter
+        else if (choice == "13"){
+            blur_filter(original_img);  // apply blur frame
         }
-        else if (choice == "14") {
+        else if (choice == "14"){
+            NaturalSunlight(original_img);  // call natural sunlight function
+        }
+        else if (choice == "15") {
             //Purple Filter
             Purple(original_img);  // call Purple
         }
-        else if (choice == "15") {
+        else if (choice == "16") {
             //Infrared Filter
             Infrared(original_img);  // call Infrared
         }
-        else if(choice == "16"){
+        else if (choice == "17") {
             //Skewing Filter
             skew(original_img); //call Skew
         }
-        else if(choice == "17"){
+        else if (choice == "18") {
             saving(original_img);
-            cout << "Thanks for using app";
+            cout << "Thanks for using the app";
             break;
         }
-        else if (choice == "18"){
-            cout << "Thanks for using app";
+        else if (choice == "19") {
+            cout << "Thanks for using the app";
             break;
         }
         else {

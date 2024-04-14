@@ -580,15 +580,15 @@ void detectEdgesWithSobel(Image& img) {
 // Doha Yasser
 void resize(Image& img){
 //    take new dimension from user
-    std::cout << "Enter the dimension you want as 200 100 (200 is width , 100 is height): ";
+    cout << "Enter the dimension you want as 200 100 (200 is width , 100 is height): ";
     int wid , hght ;
-    std::cin >> wid >> hght;
+    cin >> wid >> hght;
 
     Image img1(img);
     //    check if new width and new height are valid
     while(wid <= 0 || hght <= 0){
-        std::cout << "Error: Enter a valid  dimensions\n";
-        std::cin >> wid >> hght;
+        cout << "Error: Enter a valid  dimensions\n";
+        cin >> wid >> hght;
     }
     //    create a new image to store the editing image
     Image img2(wid, hght);

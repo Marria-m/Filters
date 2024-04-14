@@ -1,7 +1,31 @@
+// File:CS112_A3_Part2_Section25_20231160_20231089_20231056.cpp
+
+// Purpose:This program allows the user to enter a file name of an image and display a menu for them
+//         to choose the filter they want to apply on the image and continue letting him enter a file name
+//         of an image and apply doing a filter on it till the user choose to end the program or save the new image.
+
+// Author: Mariam Ehab Hassan
+//         Doha Yasser Saeed
+//         Rahma Bahgat Mohammed
+
+// Section: 25
+
+// Emails: mariamehab135721@gmail.com
+//         dohayasser362@gmail.com
+//         rahmabahgat455@gmail.com
+
+// ID1: 20231160 – Invert filter, Flip filter, Rotate filter, Frames filter, Blur filter, Natural Sunlight filter.
+
+// ID2: 20231089 – Black and white filter, Crop filter, Resize filter, Skew filter.  
+
+// ID3: 20231056 – Grayscale filter, Merge filter, Lighten filter, Darken filter, Edges filter, Purple filter, Infrared filter. 
+
+
 #include "Image_Class.h"
 using namespace std;
 
 
+// Mariam Ehab
 void valid_name(string& file_name){
     // Check if the input filename contains a valid image extension
     // If not, prompt the user to enter a valid filename until they enter a valid one
@@ -30,6 +54,7 @@ void saving(Image& img){
 }
 
 
+// Rahma Bahgat
 void GrayScale(Image& img) {
     // Grayscale Filter
     for (int i = 0; i < img.width; ++i) {
@@ -52,6 +77,7 @@ void GrayScale(Image& img) {
 }
 
 
+// Doha Yasser
 void black_white(Image& img){
     int gray ;
     for(int i = 0 ; i < img.width ; i++){
@@ -70,6 +96,7 @@ void black_white(Image& img){
 }
 
 
+// Mariam Ehab
 void invert_filter(Image& img){
     for (int i = 0; i < img.width; ++i) {
         for (int j = 0; j < img.height; ++j) {
@@ -82,6 +109,7 @@ void invert_filter(Image& img){
 }
 
 
+// Rahma Bahgat
 void resizeMerge(Image& img, Image& resizedImg, int width, int height) {
     resizedImg = Image(width, height);
 
@@ -144,6 +172,7 @@ void mergeOption2(Image& firstImage, Image& secondImage) {
 }
 
 
+// Mariam Ehab
 void rotate90Degrees(Image& img, Image& new_img){
     // Loop through each pixel of the original image
     for (int i = 0; i < img.height - 1; ++i){
@@ -177,6 +206,7 @@ void rotate90Degrees(Image& img, Image& new_img){
 }
 
 
+// Rahma Bahgat
 void lightenImage(Image& img) {
     // Function to lighten the image
 
@@ -215,6 +245,7 @@ void darkenImage(Image& img) {
 }
 
 
+// Doha Yasser
 void crop(Image& img){
     int wid , hght ,x ,y ;
 //    insert the new width and new height
@@ -251,6 +282,7 @@ void crop(Image& img){
 }
 
 
+// Mariam Ehab
 void RightLeft_frame(Image& img, int w, int R, int G, int B){
     // Create a new image with extended width to accommodate the frame
     Image img2 (img.width + (w * 2), img.height);
@@ -485,6 +517,7 @@ void frame_filter(Image& img){
 }
 
 
+// Doha Yasser
 void resize(Image& img){
 //    take new dimension from user
     std::cout << "Enter the dimension you want as 200 100 (200 is width , 100 is height): ";
@@ -515,6 +548,7 @@ void resize(Image& img){
 }
 
 
+// Mariam Ehab
 void top_left_corner(Image& image) {
     int red = 0;
     int green = 0;
@@ -734,30 +768,7 @@ void NaturalSunlight(Image& image){
 }
 
 
-void Infrared(Image& img) {
-    for (int i = 0; i < img.width; ++i) {
-        for (int j = 0; j < img.height; ++j) {
-            // Setting new values for green and blue channels
-            unsigned int red = 255 ;
-            unsigned int green = 255 - img(i, j, 2); // Green equals 225 minus blue
-            unsigned int blue = 255 - img(i, j, 1);  // Blue equals 225 minus green
-
-            // Ensure that values are in the valid range (0 to 255)
-            if (green > 255) {
-                green = 255;
-            }
-            if (blue > 255) {
-                blue = 255;
-            }
-            // Set the new color channels
-            img(i, j, 0) = red;
-            img(i, j, 1) = green;
-            img(i, j, 2) = blue;
-        }
-    }
-}
-
-
+// Rahma Bahgat
 void Purple(Image& img) {
     for (int i = 0; i < img.width; ++i) {
         for (int j = 0; j < img.height; ++j) {
@@ -783,11 +794,36 @@ void Purple(Image& img) {
 }
 
 
+void Infrared(Image& img) {
+    for (int i = 0; i < img.width; ++i) {
+        for (int j = 0; j < img.height; ++j) {
+            // Setting new values for green and blue channels
+            unsigned int red = 255 ;
+            unsigned int green = 255 - img(i, j, 2); // Green equals 225 minus blue
+            unsigned int blue = 255 - img(i, j, 1);  // Blue equals 225 minus green
+
+            // Ensure that values are in the valid range (0 to 255)
+            if (green > 255) {
+                green = 255;
+            }
+            if (blue > 255) {
+                blue = 255;
+            }
+            // Set the new color channels
+            img(i, j, 0) = red;
+            img(i, j, 1) = green;
+            img(i, j, 2) = blue;
+        }
+    }
+}
+
+
+// Doha Yasser
 void skew(Image& img){
     //store an original image
     Image img1(img);
     //  create a new image to store the editing image
-    Image img2(int(1.5*img1.width),img1.height);
+    Image img2(int(1.5*img1.width), img1.height);
     // loop on pixels
     for(int i = 0 ; i < img1.width ; i++){
         for(int j = 0 ; j < img1.height ; j++){
@@ -844,7 +880,7 @@ int main() {
         cout << "7)Darken Image\n8)Lighten Image\n9)Crop Image\n";
         cout << "10)Adding a Frame\n11)Detect Image Edges\n12)Resize Image\n";
         cout << "13)Blur Image\n14)Natural Sunlight\n15)Purple Filter\n16)Infrared Filter\n";
-        cout << "17)Image Skewing\n18)Save the image\n19)Exit without saving\n";
+        cout << "17)Image Skewing\n18)Save the image\n19)Display without saving\n";
         cout << "enter ur choice: ";
 
         // let user enter their choice
@@ -1008,6 +1044,7 @@ int main() {
             break;
         }
         else if (choice == "19") {
+            system(file_name.c_str());
             cout << "Thanks for using the app";
             break;
         }

@@ -16,9 +16,9 @@
 
 // ID1: 20231160 – Invert filter, Flip filter, Rotate filter, Frames filter, Blur filter, Natural Sunlight filter.
 
-// ID2: 20231089 – Black and white filter, Crop filter, Resize filter.  
+// ID2: 20231089 – Black and white filter, Crop filter, Resize filter.
 
-// ID3: 20231056 – Grayscale filter, Merge filter, Lighten filter, Darken filter, Edges filter, Purple filter, Infrared filter. 
+// ID3: 20231056 – Grayscale filter, Merge filter, Lighten filter, Darken filter, Edges filter, Purple filter, Infrared filter.
 
 
 #include "Image_Class.h"
@@ -517,6 +517,66 @@ void frame_filter(Image& img){
 }
 
 
+// Rahma Bahgat
+void detectEdgesWithSobel(Image& img) {
+    // Sobel operators
+    int sobelX[3][3] = {{-1, 0, 1},
+                        {-2, 0, 2},
+                        {-1, 0, 1}};
+
+    int sobelY[3][3] = {{-1, -2, -1},
+                        { 0,  0,  0},
+                        { 1,  2,  1}};
+
+    // Load the input image
+    Image edgedImage(img.width, img.height);
+
+    // Calculate the threshold as the average of pixel values
+    int threshold = 0;
+    for (int i = 0; i < img.width; ++i) {
+        for (int j = 0; j < img.height; ++j) {
+            unsigned int avg = 0; // Initialize average value
+            for (int k = 0; k < 3; ++k) {
+                avg += img.getPixel(i, j, k); // Accumulate pixel values
+            }
+            avg /= 3; // Calculate average
+            threshold += avg;
+        }
+    }
+    threshold /= (img.width * img.height); // Calculate the average threshold
+
+    // Apply the Sobel operator for edge detection using the calculated threshold
+    for (int y = 1; y < img.height - 1; ++y) {
+        for (int x = 1; x < img.width - 1; ++x) {
+            int gx = 0;
+            int gy = 0;
+
+            // Convolve the Sobel masks with the surrounding pixels
+            for (int j = -1; j <= 1; ++j) {
+                for (int i = -1; i <= 1; ++i) {
+                    int pixel_x = img.getPixel(x + i, y + j, 0); // Get the pixel value
+                    gx += sobelX[j + 1][i + 1] * pixel_x; // Apply Sobel X mask
+                    gy += sobelY[j + 1][i + 1] * pixel_x; // Apply Sobel Y mask
+                }
+            }
+
+            // Compute the magnitude of the gradient
+            int magnitude = sqrt(gx * gx + gy * gy);
+
+            // Apply thresholding to the magnitude
+            int outputPixel = magnitude >= threshold ? 0 : 255;
+
+            // Set the corresponding pixel in the output image
+            edgedImage.setPixel(x, y, 0, outputPixel);
+            edgedImage.setPixel(x, y, 1, outputPixel);
+            edgedImage.setPixel(x, y, 2, outputPixel);
+        }
+    }
+
+    img = edgedImage;
+}
+
+
 // Doha Yasser
 void resize(Image& img){
 //    take new dimension from user
@@ -699,7 +759,7 @@ void apply_blur(Image &image) {
 }
 
 
-void blur_filter(Image& img){
+void blur_filter(Image& img) {
     cout << "choose from the next...\n";
     cout << "1) blur by 20%\n";
     cout << "2) blur by 50%\n";
@@ -708,90 +768,24 @@ void blur_filter(Image& img){
     string nBlurring;
     cin >> nBlurring;
 
-    while (nBlurring != "1" && nBlurring != "2" && nBlurring != "3"){
+    while (nBlurring != "1" && nBlurring != "2" && nBlurring != "3") {
         cout << "please enter a right choice: ";
         cin >> nBlurring;
     }
 
-    if (nBlurring == "1"){
+    if (nBlurring == "1") {
         for (int n = 0; n < 10; n++) {
             apply_blur(img);
         }
-    }
-    else if (nBlurring == "2"){
+    } else if (nBlurring == "2") {
         for (int n = 0; n < 40; n++) {
             apply_blur(img);
         }
-    }
-    else if (nBlurring == "3"){
+    } else if (nBlurring == "3") {
         for (int n = 0; n < 60; n++) {
             apply_blur(img);
         }
     }
-
-}
-
-
-void detectEdgesWithSobel(Image& img) {
-    // Sobel operators
-    int sobelX[3][3] = {{-1, 0, 1},
-                        {-2, 0, 2},
-                        {-1, 0, 1}};
-
-    int sobelY[3][3] = {{-1, -2, -1},
-                        { 0,  0,  0},
-                        { 1,  2,  1}};
-
-    // Load the input image
-    Image image(image);
-
-    // Calculate the threshold as the average of pixel values
-    int threshold = 0;
-    for (int i = 0; i < image.width; ++i) {
-        for (int j = 0; j < image.height; ++j) {
-            unsigned int avg = 0; // Initialize average value
-            for (int k = 0; k < 3; ++k) {
-                avg += image.getPixel(i, j, k); // Accumulate pixel values
-            }
-            avg /= 3; // Calculate average
-            threshold += avg;
-        }
-    }
-    threshold /= (image.width * image.height); // Calculate the average threshold
-
-
-    // Create the output image with a slight increase in width and height
-    Image edgedImage(image.width + 2, image.height + 2);
-
-    // Apply the Sobel operator for edge detection using the calculated threshold
-    for (int y = 1; y < image.height - 1; ++y) {
-        for (int x = 1; x < image.width - 1; ++x) {
-            int gx = 0;
-            int gy = 0;
-
-            // Convolve the Sobel masks with the surrounding pixels
-            for (int j = -1; j <= 1; ++j) {
-                for (int i = -1; i <= 1; ++i) {
-                    int pixel_x = image.getPixel(x + i, y + j, 0); // Get the pixel value
-                    gx += sobelX[j + 1][i + 1] * pixel_x; // Apply Sobel X mask
-                    gy += sobelY[j + 1][i + 1] * pixel_x; // Apply Sobel Y mask
-                }
-            }
-
-            // Compute the magnitude of the gradient
-            int magnitude = sqrt(gx * gx + gy * gy);
-
-            // Apply thresholding to the magnitude
-            int outputPixel = magnitude >= threshold ? 0 : 255;
-
-            // Set the corresponding pixel in the output image
-            edgedImage.setPixel(x, y, 0, outputPixel);
-            edgedImage.setPixel(x, y, 1, outputPixel);
-            edgedImage.setPixel(x, y, 2, outputPixel);
-        }
-    }
-
-
 }
 
 
@@ -920,7 +914,7 @@ int main() {
         cout << "7)Darken Image\n8)Lighten Image\n9)Crop Image\n";
         cout << "10)Adding a Frame\n11)Detect Image Edges\n12)Resize Image\n";
         cout << "13)Blur Image\n14)Natural Sunlight\n15)Purple Filter\n16)Infrared Filter\n";
-        cout << "17)Image Skewing\n18)Save the image\n19)Display without saving\n";
+        cout << "17)Save the image\n18)Display without saving\n";
         cout << "enter ur choice: ";
 
         // let user enter their choice
@@ -1075,15 +1069,11 @@ int main() {
             Infrared(original_img);  // call Infrared
         }
         else if (choice == "17") {
-            //Skewing Filter
-            skew(original_img); //call Skew
-        }
-        else if (choice == "18") {
             saving(original_img);
             cout << "Thanks for using the app";
             break;
         }
-        else if (choice == "19") {
+        else if (choice == "18") {
             system(file_name.c_str());
             cout << "Thanks for using the app";
             break;
@@ -1104,4 +1094,3 @@ int main() {
 // take the dimensions of the area to cut.
 // check if the dimensions of the area is valid.
 // This area is cut and stored in a new image.
-

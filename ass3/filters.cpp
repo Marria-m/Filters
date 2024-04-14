@@ -732,6 +732,69 @@ void blur_filter(Image& img){
 }
 
 
+void detectEdgesWithSobel(Image& img) {
+    // Sobel operators
+    int sobelX[3][3] = {{-1, 0, 1},
+                        {-2, 0, 2},
+                        {-1, 0, 1}};
+
+    int sobelY[3][3] = {{-1, -2, -1},
+                        { 0,  0,  0},
+                        { 1,  2,  1}};
+
+    // Load the input image
+    Image image(image);
+
+    // Calculate the threshold as the average of pixel values
+    int threshold = 0;
+    for (int i = 0; i < image.width; ++i) {
+        for (int j = 0; j < image.height; ++j) {
+            unsigned int avg = 0; // Initialize average value
+            for (int k = 0; k < 3; ++k) {
+                avg += image.getPixel(i, j, k); // Accumulate pixel values
+            }
+            avg /= 3; // Calculate average
+            threshold += avg;
+        }
+    }
+    threshold /= (image.width * image.height); // Calculate the average threshold
+
+
+    // Create the output image with a slight increase in width and height
+    Image edgedImage(image.width + 2, image.height + 2);
+
+    // Apply the Sobel operator for edge detection using the calculated threshold
+    for (int y = 1; y < image.height - 1; ++y) {
+        for (int x = 1; x < image.width - 1; ++x) {
+            int gx = 0;
+            int gy = 0;
+
+            // Convolve the Sobel masks with the surrounding pixels
+            for (int j = -1; j <= 1; ++j) {
+                for (int i = -1; i <= 1; ++i) {
+                    int pixel_x = image.getPixel(x + i, y + j, 0); // Get the pixel value
+                    gx += sobelX[j + 1][i + 1] * pixel_x; // Apply Sobel X mask
+                    gy += sobelY[j + 1][i + 1] * pixel_x; // Apply Sobel Y mask
+                }
+            }
+
+            // Compute the magnitude of the gradient
+            int magnitude = sqrt(gx * gx + gy * gy);
+
+            // Apply thresholding to the magnitude
+            int outputPixel = magnitude >= threshold ? 0 : 255;
+
+            // Set the corresponding pixel in the output image
+            edgedImage.setPixel(x, y, 0, outputPixel);
+            edgedImage.setPixel(x, y, 1, outputPixel);
+            edgedImage.setPixel(x, y, 2, outputPixel);
+        }
+    }
+
+
+}
+
+
 void NaturalSunlight(Image& image){
     for (int i = 0; i < image.width; ++i) {
         for (int j = 0; j < image.height; ++j) {
@@ -991,7 +1054,7 @@ int main() {
             frame_filter(original_img);  // apply frame filter
         }
         else if (choice == "11"){
-            cout << "Rahma, put the edges filter here ^-^\n";
+            detectEdgesWithSobel(original_img);
         }
         else if (choice == "12") {
             // resize img

@@ -2,7 +2,7 @@
 using namespace std;
 
 
-void validname(string& file_name){
+void valid_name(string& file_name){
     // Check if the input filename contains a valid image extension
     // If not, prompt the user to enter a valid filename until they enter a valid one
     while(file_name.find(".jpg") == string::npos && file_name.find(".bmp") == string::npos && file_name.find(".png") == string::npos && file_name.find(".jpeg") == string::npos && file_name.find(".tga") == string::npos) {
@@ -21,7 +21,7 @@ void saving(Image& img){
     cout << "and specify extension .jpg, .bmp, .png , .jpeg , .tga: ";
     cin >> file_name;
 
-    validname(file_name);
+    valid_name(file_name);
 
     img.saveImage(file_name);  // Save the edited image
 
@@ -29,8 +29,9 @@ void saving(Image& img){
     system(file_name.c_str());
 }
 
-// Grayscale Filter
+
 void GrayScale(Image& img) {
+    // Grayscale Filter
     for (int i = 0; i < img.width; ++i) {
         for (int j = 0; j < img.height; ++j) {
             unsigned int avg = 0; // Initialization of the average
@@ -80,6 +81,7 @@ void invert_filter(Image& img){
     }
 }
 
+
 void resizeMerge(Image& img, Image& resizedImg, int width, int height) {
     resizedImg = Image(width, height);
 
@@ -94,8 +96,10 @@ void resizeMerge(Image& img, Image& resizedImg, int width, int height) {
     }
 }
 
-// Function for Option 1: Merge by resizing the smaller image or both images to the biggest height and width
+
 void mergeOption1(Image& firstImage, Image& secondImage) {
+    // Function for Option 1: Merge by resizing the smaller image or both images to the biggest height and width
+
     // Calculate the dimensions of the merged image
     int maxWidth = max(firstImage.width, secondImage.width);
     int maxHeight = max(firstImage.height, secondImage.height);
@@ -116,8 +120,10 @@ void mergeOption1(Image& firstImage, Image& secondImage) {
     firstImage = mergedImage;
 }
 
-// Function for Option 2: Merge by resizing the common area of the smaller width and height
+
 void mergeOption2(Image& firstImage, Image& secondImage) {
+    // Function for Option 2: Merge by resizing the common area of the smaller width and height
+
     // Calculate the dimensions of the merged image
     int minWidth = min(firstImage.width, secondImage.width);
     int minHeight = min(firstImage.height, secondImage.height);
@@ -171,8 +177,9 @@ void rotate90Degrees(Image& img, Image& new_img){
 }
 
 
-// Function to lighten the image
 void lightenImage(Image& img) {
+    // Function to lighten the image
+
     for (int i = 0; i < img.width; ++i) {
         for (int j = 0; j < img.height; ++j) {
             // Adjust intensity of each channel
@@ -189,8 +196,9 @@ void lightenImage(Image& img) {
 }
 
 
-// Function to darken the image
 void darkenImage(Image& img) {
+    // Function to darken the image
+
     for (int i = 0; i < img.width; ++i) {
         for (int j = 0; j < img.height; ++j) {
             // Adjust intensity of each channel
@@ -206,9 +214,10 @@ void darkenImage(Image& img) {
     }
 }
 
+
 void crop(Image& img){
     int wid , hght ,x ,y ;
-//    insert the new width and new heigth
+//    insert the new width and new height
     cout << "Enter the dimension of the point to start with as 200 100 (200 is width , 100 is height):";
     cin >> wid >> hght;
 
@@ -232,7 +241,7 @@ void crop(Image& img){
     for(int i = 0 ; i < x ; i++){
         for(int j = 0 ; j < y; j++){
             for(int k = 0 ; k < 3 ; k++) {
-                // to make the first pixel in new image as the starting point in the origanal image
+                // to make the first pixel in new image as the starting point in the original image
                 img2(i, j, k) = img1(wid + i, hght + j, k);
             }
         }
@@ -242,7 +251,7 @@ void crop(Image& img){
 }
 
 
-void rightleft_frame(Image& img, int w, int R, int G, int B){
+void RightLeft_frame(Image& img, int w, int R, int G, int B){
     // Create a new image with extended width to accommodate the frame
     Image img2 (img.width + (w * 2), img.height);
 
@@ -267,7 +276,7 @@ void rightleft_frame(Image& img, int w, int R, int G, int B){
 }
 
 
-void topbot_frame(Image& img, int w, int R, int G, int B){
+void TopBot_frame(Image& img, int w, int R, int G, int B){
     // Create a new image with extended height
     Image img2 (img.width, img.height + (w * 2));
 
@@ -397,7 +406,7 @@ void wight_input(int& wi_f){
 }
 
 
-void colourchoice(int& r, int& g, int& b){
+void colour_choice(int& r, int& g, int& b){
     // Function to prompt the user to choose a color for the frame
     cout << "colours u can choose from...\n";
     cout << "1.Black\n2.wight\n3.Gray\n4.red\n5.blue\n6.green\n";
@@ -436,7 +445,7 @@ void colourchoice(int& r, int& g, int& b){
 void frame_filter(Image& img){
     // Function to apply frame filters to the image based on user choice
     int r, g, b;
-    colourchoice(r, g, b);  // Prompt user to choose frame color
+    colour_choice(r, g, b);  // Prompt user to choose frame color
 
     string choice;
     cout << "choose the frame...\n";
@@ -450,12 +459,12 @@ void frame_filter(Image& img){
     if (choice == "1"){
         int wight;
         wight_input(wight);  // Prompt user to input frame width
-        topbot_frame(img, wight, r, g, b);  // Apply top and bottom frame
+        TopBot_frame(img, wight, r, g, b);  // Apply top and bottom frame
     }
     else if (choice == "2"){
         int wight;
         wight_input(wight);
-        rightleft_frame(img, wight, r, g, b);  // Apply right and left frame
+        RightLeft_frame(img, wight, r, g, b);  // Apply right and left frame
     }
     else if (choice == "3"){
         int wight;
@@ -736,16 +745,10 @@ void Infrared(Image& img) {
             // Ensure that values are in the valid range (0 to 255)
             if (green > 255) {
                 green = 255;
-            } else if (green < 0) {
-                green = 0;
             }
-
             if (blue > 255) {
                 blue = 255;
-            } else if (blue < 0) {
-                blue = 0;
             }
-
             // Set the new color channels
             img(i, j, 0) = red;
             img(i, j, 1) = green;
@@ -770,9 +773,6 @@ void Purple(Image& img) {
             if (blue > 255){
                 blue = 255;
             }
-            if (green < 0){
-                green = 0;
-            }
 
             // Set the new color channels
             img(i, j, 0) = red;
@@ -786,7 +786,7 @@ void Purple(Image& img) {
 void skew(Image& img){
     //store an original image
     Image img1(img);
-    //  create a new imgae to store the editting image
+    //  create a new image to store the editing image
     Image img2("newImage.png");
     // loop on pixels
     for(int i = 0 ; i < img1.width ; i++){
@@ -811,7 +811,7 @@ int main() {
     string file_name;
     cout << "plz enter the name of the image: \n";
     cin >> file_name;
-    validname(file_name);
+    valid_name(file_name);
     Image original_img(file_name);
 
     while (original_img.imageData == nullptr) {
@@ -838,8 +838,15 @@ int main() {
         string choice, rotate;
 
         // Display a list of the supported operations to the user
-        cout << "choose what u wanna apply on the Picture\n1)Grayscale\n2)Black and White\n3)Invert Image\n4)merge two images\n5)Flip Image\n6)Rotate Image\n7)Darken Image\n8)Lighten Image\n9)Crop Image\n10)Adding a Frame\n11)Detect Image Edges\n12)Resize Image\n13)Blur Image\n14)Natural Sunlight\n15)Purple Filter\n16)Infrared Filter\n17)Image Skewing\n18)Save the image\n19)Exit without saving\n";
+        cout << "choose what u wanna apply on the Picture\n";
+        cout << "1)Grayscale\n2)Black and White\n3)Invert Image\n";
+        cout << "4)merge two images\n5)Flip Image\n6)Rotate Image\n";
+        cout << "7)Darken Image\n8)Lighten Image\n9)Crop Image\n";
+        cout << "10)Adding a Frame\n11)Detect Image Edges\n12)Resize Image\n";
+        cout << "13)Blur Image\n14)Natural Sunlight\n15)Purple Filter\n16)Infrared Filter\n";
+        cout << "17)Image Skewing\n18)Save the image\n19)Exit without saving\n";
         cout << "enter ur choice: ";
+
         // let user enter their choice
         cin >> choice;
 
@@ -860,6 +867,7 @@ int main() {
             // Get the paths of the images to be merged
             cout << "Enter the name of the second image: ";
             cin >> secondImageName;
+            valid_name(secondImageName);
 
             // Choose merge option
             while (true) {
@@ -892,8 +900,8 @@ int main() {
             cin >> rotate;
             if (rotate == "1") {
                 // Flip vertically
-                for (int t = 0; t < original_img.width - 1; ++t) {  // loop on image width to flip each colomn
-                    // initialize 2 variables 'top' is the top of the image in one colomn and 'bot' is the last pixel in one colomn
+                for (int t = 0; t < original_img.width - 1; ++t) {  // loop on image width to flip each column
+                    // initialize 2 variables 'top' is the top of the image in one column and 'bot' is the last pixel in one column
                     int top = 0;
                     int bot = original_img.height - 1;
                     while (top < bot) {  // stop if top = bot
@@ -907,7 +915,7 @@ int main() {
             }
             else if (rotate == "2") {
                 // flip image horizontally
-                for (int t = 0; t < original_img.height - 1; ++t) {  // loop on image hight to flip each row
+                for (int t = 0; t < original_img.height - 1; ++t) {  // loop on image height to flip each row
                     // initialize 2 variables 'l' is the left pixel of the image in one row and 'r' is the right pixel in one row
                     int l = 0;
                     int r = original_img.width - 1;
@@ -1013,9 +1021,10 @@ int main() {
 }
 
 
-/*algorthim for crop filter*/
+/*algorithm for crop filter*/
 // take the dimension of starting point from user.
 // check if the dimensions are smaller than or equal to the original image.
 // take the dimensions of the area to cut.
 // check if the dimensions of the area is valid.
 // This area is cut and stored in a new image.
+

@@ -108,7 +108,9 @@ void rotate90Degrees(Image& img, Image& new_img){
             r--;
         }
     }
+    Image temp = img;
     img = new_img;
+    new_img = temp;
 }
 
 
@@ -516,13 +518,13 @@ void skew(Image& img){
             for(int k = 0 ;k < 3 ; k++){
                 // width of pixel + half of height
                 int skew = i + int(j*0.5);
-                if(skew < img2.width){
-                    img2(skew,j,k) = img1(i,j,k);
+                if(skew < img1.width){
+                    img1(skew,j,k) = img1(i,j,k);
                 }
             }
         }
     }
-    img = img2;
+    img = img1;
 }
 
 
@@ -703,3 +705,4 @@ int main(){
 // take the dimensions of the area to cut.
 // check if the dimensions of the area is valid.
 // This area is cut and stored in a new image.
+

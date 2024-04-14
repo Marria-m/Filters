@@ -68,6 +68,66 @@ void black_white(Image& img){
     }
 }
 
+void resizeMerge(Image& img, Image& resizedImg, int width, int height) {
+    resizedImg = Image(width, height);
+
+    for (int i = 0; i < resizedImg.width; ++i) {
+        for (int j = 0; j < resizedImg.height; ++j) {
+            for (int k = 0; k < 3; ++k) {
+                int x = i * img.width / resizedImg.width;
+                int y = j * img.height / resizedImg.height;
+                resizedImg(i, j, k) = img(x, y, k);
+            }
+        }
+    }
+}
+
+// Function for Option 1: Merge by resizing the smaller image or both images to the biggest height and width
+void mergeOption1(Image& firstImage, Image& secondImage, const string& filename) {
+    // Calculate the dimensions of the merged image
+    int maxWidth = max(firstImage.width, secondImage.width);
+    int maxHeight = max(firstImage.height, secondImage.height);
+
+    Image resizedFirstImage, resizedSecondImage;
+    resizeMerge(firstImage, resizedFirstImage, maxWidth, maxHeight);
+    resizeMerge(secondImage, resizedSecondImage, maxWidth, maxHeight);
+
+    Image mergedImage(maxWidth, maxHeight);
+    for (int i = 0; i < maxWidth; ++i) {
+        for (int j = 0; j < maxHeight; ++j) {
+            for (int k = 0; k < 3; ++k) {
+                mergedImage(i, j, k) = (resizedFirstImage(i, j, k) + resizedSecondImage(i, j, k)) / 2;
+            }
+        }
+    }
+
+    // Save the merged image
+    mergedImage.saveImage(filename + "_option1.jpg");
+}
+
+// Function for Option 2: Merge by resizing the common area of the smaller width and height
+void mergeOption2(Image& firstImage, Image& secondImage, const string& filename) {
+    // Calculate the dimensions of the merged image
+    int minWidth = min(firstImage.width, secondImage.width);
+    int minHeight = min(firstImage.height, secondImage.height);
+
+    Image resizedFirstImage, resizedSecondImage;
+    resizeMerge(firstImage, resizedFirstImage, minWidth, minHeight);
+    resizeMerge(secondImage, resizedSecondImage, minWidth, minHeight);
+
+    Image mergedImage(minWidth, minHeight);
+    for (int i = 0; i < minWidth; ++i) {
+        for (int j = 0; j < minHeight; ++j) {
+            for (int k = 0; k < 3; ++k) {
+                mergedImage(i, j, k) = (resizedFirstImage(i, j, k) + resizedSecondImage(i, j, k)) / 2;
+            }
+        }
+    }
+
+    // Save the merged image
+    mergedImage.saveImage(filename + "_option2.jpg");
+}
+
 
 void invert_filter(Image& img){
     for (int i = 0; i < img.width; ++i) {
@@ -576,8 +636,51 @@ int main(){
             // invert color channels
             invert_filter(original_img);
         }
+        else if (choice == "4"){
+            // Merge filter
+            string firstImageName, secondImageName, filename;
+    int mergeOption;
 
-        else if(choice == "4"){
+    // Get the paths of the images to be merged
+    cout << "Enter the name of the first image: ";
+    cin >> firstImageName;
+    cout << "Enter the name of the second image: ";
+    cin >> secondImageName;
+    cout << "Enter the filename to save the final image: ";
+    cin >> filename;
+
+    // Choose merge option
+    while (true) {
+        cout << "Choose merge option:\n";
+        cout << "1. Merge by resizing the smaller image or both images to the biggest height and width\n";
+        cout << "2. Merge by resizing the common area of the smaller width and height\n";
+        cin >> mergeOption;
+
+        if (mergeOption == 1 || mergeOption == 2) {
+            break;
+        } else {
+            cout << "Invalid merge option. Please enter a valid option.\n";
+        }
+    }
+
+    // Load the first image
+    Image firstImage(firstImageName);
+
+    // Load the second image
+    Image secondImage(secondImageName);
+
+    // Perform merge operation based on the chosen option
+    if (mergeOption == 1) {
+        mergeOption1(firstImage, secondImage, filename);
+    } else if (mergeOption == 2) {
+        mergeOption2(firstImage, secondImage, filename);
+    }
+
+    return 0;
+}
+
+        }
+        else if(choice == "5"){
             // allow user to choose horizontal or vertical flip
             cout << "Flip the image...\n1)Vertical\n2)Horizontal\n";
             cin >> rotate;

@@ -787,7 +787,7 @@ void skew(Image& img){
     //store an original image
     Image img1(img);
     //  create a new image to store the editing image
-    Image img2(int(1.5*img1.width),height);
+    Image img2(int(1.5*img1.width),img1.height);
     // loop on pixels
     for(int i = 0 ; i < img1.width ; i++){
         for(int j = 0 ; j < img1.height ; j++){

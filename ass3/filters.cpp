@@ -132,6 +132,7 @@ void crop(Image& img){
     }
     std::cout << "Enter the area to cut as 600 600 (600*600)";
     cin >> x >> y;
+    // check if in range
     while(wid + x > img1.width || wid + x <= 0 || hght + y > img1.height || hght + y <= 0 || x <= 0 || y <= 0){
         std::cout << "Out Of Range , please enter a valid area\n";
         std::cin >> x >> y;
@@ -139,11 +140,12 @@ void crop(Image& img){
 //    create a new image to store the editing image
     Image img2(x, y);
 
-
+    // loop on pixels
     for(int i = 0 ; i < x ; i++){
         for(int j = 0 ; j < y; j++){
             for(int k = 0 ; k < 3 ; k++) {
-                img2(i, j, k) = img1(wid + i, hght + j, k);
+                // to make the first pixel in new image as the starting point in the origanal image 
+                img2(i, j, k) = img1(wid + i, hght + j, k); 
             }
         }
 
@@ -165,7 +167,7 @@ void resize(Image& img){
     }
     //    create a new image to store the editing image
     Image img2(wid, hght);
-
+    // loop on pixels
     for(int i = 0 ; i < wid ; i++){
         for(int j = 0 ; j < hght ; j++){
             for(int k = 0 ; k < 3 ; k++) {
@@ -182,12 +184,15 @@ void resize(Image& img){
 }
 
 void skew(Image& img){
+    //store an original image 
     Image img1(img);
+    //  create a new imgae to store the editting image
     Image img2("newImage.png");
-
+    // loop on pixels
     for(int i = 0 ; i < img1.width ; i++){
         for(int j = 0 ; j < img1.height ; j++){
             for(int k = 0 ;k < 3 ; k++){
+                // width of pixel + half of height 
                 int skew = i + int(j*0.5);
                 if(skew < img2.width){
                     img2(skew,j,k) = img1(i,j,k);
@@ -426,5 +431,13 @@ int main(){
 
     return 0;
 }
+
+
+/*algorthim for crop filter*/
+// take the dimension of starting point from user.
+// check if the dimensions are smaller than or equal to the original image.
+// take the dimensions of the area to cut.
+// check if the dimensions of the area is valid.
+// This area is cut and stored in a new image.
 
 

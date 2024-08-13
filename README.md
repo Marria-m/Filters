@@ -1,2 +1,2 @@
-# assignment 3
-assignment 3 with teammm
+# Filters
+Do a various filters for images with a custom library made by FCAI students 
